@@ -1,4 +1,4 @@
-title Note Submission
+title Regular Note Submission
 
 Browser->Server: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note
 Server->Browser: HTTP Status Code 302

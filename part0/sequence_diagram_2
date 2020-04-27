@@ -1,22 +1,10 @@
-title Note Submission
+title SPA Site Load
 
-note over Browser:
-On form submission, an event handler
-creates a new element (new_note)
-and appends it to notes list.
-end note
-
-note over Browser:
-new_note is transformed to JSON 
-format and sent to server.
-
-end note
-Browser->Server: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
-
-note over Server:
-The POST sends data in JSON
-format to be used in javascript code.
-end note over 
-
-Server->Browser: HTTP Status Code 201 Created
-
+Browser->Server: HTTP GET https://fullstack-exampleapp.herokuapp.com/spa
+Server--> Browser: HTML Code
+Browser->Server: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.css
+Server--> Browser: main.css
+Browser->Server: HTTP GET https://fullstack-exampleapp.herokuapp.com/spa.js
+Server--> Browser: spa.js
+Browser->Server: HTTP GET https://fullstack-exampleapp.herokuapp.com/data.json
+Server--> Browser: [{json: "data"}]
