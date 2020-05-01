@@ -2,16 +2,30 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom'
 import './index.css';
 
-const Statistics = ({name, stats}) =>
-  <div>
-    <h1>{name}</h1>
-    <p>{stats[0].name} {stats[0].clicks}</p>
-    <p>{stats[1].name} {stats[1].clicks}</p>
-    <p>{stats[2].name} {stats[2].clicks}</p>
-    <p>{stats[3].name} {stats[3].clicks}</p>
-    <p>{stats[4].name} {stats[4].clicks}</p>
-    <p>{stats[5].name} {stats[5].clicks}</p>
-  </div>
+// Statistics component
+const Statistics = ({name, stats, count}) => {
+  if (count !== 0) {
+    return ( 
+      <div>
+        <h1>{name}</h1>
+        <p>{stats[0].name} {stats[0].clicks}</p>
+        <p>{stats[1].name} {stats[1].clicks}</p>
+        <p>{stats[2].name} {stats[2].clicks}</p>
+        <p>{stats[3].name} {stats[3].clicks}</p>
+        <p>{stats[4].name} {stats[4].clicks}</p>
+        <p>{stats[5].name} {stats[5].clicks}</p>
+      </div>
+    )    
+  }
+  else {
+    return (
+      <div> 
+        <h1>statistics</h1>
+        <p>No feedback given</p>      
+      </div>
+    )
+  }
+}
 
 function App() {
   const [clicks, setClicks] = useState({ left: 0, middle: 0, right: 0, all: 0 })
@@ -61,7 +75,7 @@ function App() {
         </div>
       </div>
 
-      <Statistics name={statistics.name} stats={statistics.stats}/>
+      <Statistics name={statistics.name} stats={statistics.stats} count={clicks.all}/>
 
     </div>      
   );
