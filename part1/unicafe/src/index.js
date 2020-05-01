@@ -2,18 +2,24 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom'
 import './index.css';
 
+// Statistic component
+const Statistic =({text, value}) => {
+  return (
+    <p>{text}: {value}</p>
+  )
+}
 // Statistics component
 const Statistics = ({name, stats, count}) => {
   if (count !== 0) {
     return ( 
       <div>
         <h1>{name}</h1>
-        <p>{stats[0].name} {stats[0].clicks}</p>
-        <p>{stats[1].name} {stats[1].clicks}</p>
-        <p>{stats[2].name} {stats[2].clicks}</p>
-        <p>{stats[3].name} {stats[3].clicks}</p>
-        <p>{stats[4].name} {stats[4].clicks}</p>
-        <p>{stats[5].name} {stats[5].clicks}</p>
+        <Statistic text={stats[0].name} value={stats[0].clicks}/>
+        <Statistic text={stats[1].name} value={stats[1].clicks}/>
+        <Statistic text={stats[2].name} value={stats[2].clicks}/>
+        <Statistic text={stats[3].name} value={stats[3].clicks}/>
+        <Statistic text={stats[4].name} value={stats[4].clicks}/>
+        <Statistic text={stats[5].name} value={stats[5].clicks}/>
       </div>
     )    
   }
@@ -27,12 +33,13 @@ const Statistics = ({name, stats, count}) => {
   }
 }
 
-function App() {
-  const [clicks, setClicks] = useState({ left: 0, middle: 0, right: 0, all: 0 })
-  const handleLeftClick = () => { setClicks({...clicks, left: clicks.left + 1, all: clicks.all + 1 }) }
-  const handleMiddleClick = () => { setClicks({...clicks, middle: clicks.middle + 1, all: clicks.all + 1 }) }
-  const handleRightClick = () => { setClicks({...clicks, right: clicks.right + 1, all: clicks.all + 1 }) }
+// Button component
+const Button = ({name, handleClick}) => <button onClick={handleClick}>{name}</button>
 
+function App() {
+  // Hook
+  const [clicks, setClicks] = useState({ left: 0, middle: 0, right: 0, all: 0 })
+  
   const statistics = {
     name: 'statistics',
     stats: [
@@ -68,10 +75,9 @@ function App() {
       <div>
         <h1> give feedback </h1>
         <div>
-          <button onClick={handleLeftClick}>good</button> 
-          <button onClick={handleMiddleClick}>neutral</button> 
-          <button onClick={handleRightClick}>bad</button> 
-
+          <Button name="good" handleClick={() => { setClicks({...clicks, left: clicks.left + 1, all: clicks.all + 1 }) }}/>
+          <Button name="neutral" handleClick={() => { setClicks({...clicks, middle: clicks.middle + 1, all: clicks.all + 1 }) }}/>
+          <Button name="bad" handleClick={() => { setClicks({...clicks, right: clicks.right + 1, all: clicks.all + 1 }) }}/>
         </div>
       </div>
 
