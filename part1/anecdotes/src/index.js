@@ -15,8 +15,45 @@ const anecdotes = [
   'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
 ]
 
+// Voting
+const points = [0,0,0,0,0]
+const copy = [...points]
+function addToPoints(i) {
+  copy[i] += 1
+}
+
+
+function bestAnecdote (points) {
+  var i = 0
+  var highestVoteCount = 0
+  var best = anecdotes[0]
+  while (i < points.length) {
+    if (points[i] > highestVoteCount) {
+      highestVoteCount = points[i]
+      best = anecdotes[i]      
+    }
+    i += 1
+  }
+  return([best, highestVoteCount])
+}
+
 // Button component
-const Button = ({name, randomAnecdote}) => <button onClick={randomAnecdote}>{name}</button>
+const Button = ({name, onClick}) => <button onClick={onClick}>{name}</button>
+
+//Anecdote component
+const BestAnecdote = () => {
+  const best = bestAnecdote(copy)
+  const anecdote = best[0]
+  const voteCount = best[1]
+  
+  return (
+    <div>
+      <h1>Anecdote with most votes</h1>
+      <p>{anecdote}</p>
+       <p> has {voteCount} votes.</p>      
+    </div>
+  )
+}
 
 const App = (props) => {
   const [selected, setSelected] = useState(0)
@@ -27,10 +64,16 @@ const App = (props) => {
 
   return (
     <div>
-      <p>
-        {props.anecdotes[selected]}      
-      </p>
-      <Button name="next anecdote" randomAnecdote={()=> {setToValue(getRandomInt(5))}}/>
+      <div>
+        <h1>Anecdote of the day</h1>
+        <p>{props.anecdotes[selected]}</p>
+        <p>has {copy[selected]} votes</p>
+        <Button name="vote" onClick={() => {addToPoints(selected)}}/>
+        <Button name="next anecdote" onClick={()=> {setToValue(getRandomInt(5))}}/>      
+      </div>
+      <div> 
+        <BestAnecdote />
+      </div>
     </div>
   )
 }
