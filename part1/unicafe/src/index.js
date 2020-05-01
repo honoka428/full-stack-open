@@ -7,31 +7,9 @@ function App() {
     left: 0, middle: 0, right: 0
   })
 
-  const handleLeftClick = () => {
-    const newClicks = { 
-      left: clicks.left + 1, 
-      middle: clicks.middle, 
-      right: clicks.right 
-    }
-    setClicks(newClicks)
-  }
-  const handleMiddleClick = () => {
-    const newClicks = { 
-      left: clicks.left, 
-      middle: clicks.middle + 1,       
-      right: clicks.right 
-    }
-    setClicks(newClicks)
-  }
-
-  const handleRightClick = () => {
-    const newClicks = { 
-      left: clicks.left, 
-      middle: clicks.middle, 
-      right: clicks.right + 1 
-    }
-    setClicks(newClicks)
-  }
+  const handleLeftClick = () => { setClicks({...clicks, left: clicks.left + 1 }) }
+  const handleMiddleClick = () => { setClicks({...clicks, middle: clicks.middle + 1 }) }
+  const handleRightClick = () => { setClicks({...clicks, right: clicks.right + 1 }) }
 
   return (
     <div>
