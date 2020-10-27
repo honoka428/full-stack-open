@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 
-const Person = (person) => <div>{person.person.name}</div>
+const Person = (person) => <div>{person.person.name}  {person.person.number}</div>
 
 const App = () => {
   const [ persons, setPersons ] = useState([
     { name: 'Arto Hellas', id: 0 }
   ]) 
   const [ newName, setNewName ] = useState('')
+  const [ newNumber, setNewNumber ] = useState('')
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -15,7 +16,8 @@ const App = () => {
 
     const personObject = {
       name: newName,
-      id: persons.length + 1
+      id: persons.length + 1,
+      number: newNumber
     }
 
     persons.forEach( e => {
@@ -38,6 +40,11 @@ const App = () => {
     console.log(event.target.value)
     setNewName(event.target.value)
   }
+  
+  const handleNumberChange = (event) => {
+    console.log(event.target.value)
+    setNewNumber(event.target.value)
+  }
 
   return (
     <div>
@@ -49,6 +56,12 @@ const App = () => {
                 onChange={handleNameChange}
                 />
         </div>
+        <div>
+          number: <input 
+                value={newNumber}  
+                onChange={handleNumberChange}
+                />
+        </div>        
         <div>
           <button type="submit">add</button>
         </div>
