@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 
+const baseUrl = 'http://localhost:3001/persons'
+
 const Person = (person) => <div>{person.person.name}  {person.person.number}</div>
 
 const Filter = (props) => <div> filter shown with: <input value={props.newFilter}  onChange={props.handleFilterChange}/></div> 
@@ -32,11 +34,9 @@ const App = () => {
   const [showAll, setShowAll] = useState(true)
 
   useEffect(() => {
-    console.log('effect')
     axios
-      .get('http://localhost:3001/persons')
+      .get(baseUrl)
       .then(response => {
-        console.log('promise fulfilled')
         setPersons(response.data)
       })
   }, [])
@@ -66,11 +66,13 @@ const App = () => {
     
     if (!personExists) {
       setPersons(persons.concat(personObject))
+      axios.post(baseUrl, personObject)
     } else {
       alert(`${newName} is already added to phonebook`)
     }
 
     setNewName('')
+    setNewNumber('')
   }
 
   const handleNameChange = (event) => {
@@ -87,7 +89,7 @@ const App = () => {
   }
 
   return (
-    <div>
+    <div style={{margin: 30}}>
       <h2>Phonebook</h2>     
       <Filter newFilter={newFilter}  handleFilterChange={handleFilterChange}/>
 
