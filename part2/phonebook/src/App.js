@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import PersonService from './services/persons'
 
-const Person = (person) => <div>{person.person.name}  {person.person.number}</div>
+const Person = (props) => 
+  <div style={{display: 'flex', marginTop: 10}}>
+    <div>{props.person.name}:  {props.person.number}</div>
+    <button value={props.person.id} onClick={props.handleDelete} style={{marginLeft: 10}}>delete</button>
+  </div>
 
 const Filter = (props) => <div> filter shown with: <input value={props.newFilter}  onChange={props.handleFilterChange}/></div> 
+
 const PersonInput = (props) => 
   <form onSubmit={props.addPerson}>
     <div>
@@ -85,6 +90,18 @@ const App = () => {
     setShowAll(false)
   }
 
+  const handleDeleteButton = (event) => {
+    if (window.confirm("Are you sure you want to delete this person?")) { 
+      PersonService.remove(event.target.value)
+        .then(
+          persons.filter(person => person.id !== null)
+        )
+        .catch(
+          alert(`This person was already deleted from the server`)
+        )
+    }
+  }
+
   return (
     <div style={{margin: 30}}>
       <h2>Phonebook</h2>     
@@ -102,7 +119,11 @@ const App = () => {
       <h2>Numbers</h2>
       <ul>
         {personsToShow.map(person => 
-          <Person key={person.id} person={person} />
+          <Person 
+            key={person.id}
+            person={person}
+            handleDelete={handleDeleteButton}
+          />
         )}
       </ul> 
     </div>

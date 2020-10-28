@@ -1,11 +1,6 @@
 {
   "persons": [
     {
-      "name": "Arto Hellas",
-      "number": "040-123456",
-      "id": 1
-    },
-    {
       "name": "Ada Lovelace",
       "number": "39-44-5323523",
       "id": 2
@@ -24,6 +19,11 @@
       "name": "Honoka Watanabe ",
       "id": 5,
       "number": "020-231-2313"
+    },
+    {
+      "name": "Monica Geller",
+      "id": 6,
+      "number": "102-342-1233"
     }
   ]
 }
