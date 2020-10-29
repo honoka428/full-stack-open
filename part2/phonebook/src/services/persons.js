@@ -15,7 +15,7 @@ const create = (personObject) => {
 // Returns a status code
 const remove = (id) => {
     const request = axios.delete(`${baseUrl}/${id}`)
-    return request.then(response => response.statusText).catch(error => {console.log('failed', error)})
+    return request.then(response => response.statusText)
 }
 
 const modify = (modifiedObject, id) => {

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import PersonService from './services/persons'
+import './index.css'
 
 const Person = (props) => 
   <div style={{display: 'flex', marginTop: 10}}>
@@ -28,6 +29,17 @@ const PersonInput = (props) =>
     </div>
   </form>
 
+const Notification = ({ message, errorType }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className={errorType}>
+      {message}
+    </div>
+  )
+}
 const App = () => {
 
   const [ persons, setPersons ] = useState([]) 
@@ -35,6 +47,8 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('')
   const [newFilter, setNewFilter] = useState('')
   const [showAll, setShowAll] = useState(true)
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [errorType, setErrorType] = useState('')
 
   var personsToShow = showAll 
     ? persons 
@@ -74,6 +88,11 @@ const App = () => {
     if (!personExists) {
       setPersons(persons.concat(personObject))
       PersonService.create(personObject)
+      setErrorType('greenError')
+      setErrorMessage('Person Added Successfully')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
     }
 
     else if (personExists){
@@ -86,6 +105,11 @@ const App = () => {
           .modify(modifiedObject, id)
           .then(updatedPerson => {
             setPersons(p => p.id !== id ? p : updatedPerson)
+            setErrorType('greenError')
+            setErrorMessage('Number replaced succesfully')
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 5000)
           })
         
       } else return
@@ -119,19 +143,26 @@ const App = () => {
         .then( () => {
           const idToDelete = persons.find(p => String(p.id) === event.target.value).id
           setPersons(persons.filter(p => p.id !== idToDelete))
+          setErrorType('greenError')
+          setErrorMessage('Person deleted succesfully')
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
         })
         .catch( err => {
           console.log(err)
-          alert(`This person was already deleted from the server`)
+          setErrorType('redError')
+          setErrorMessage(`This person was already deleted from the server`)
           const idToDelete = persons.find(p => String(p.id) === event.target.value).id
-          setPersons(persons.filter(p => p.id !== idToDelete))
+          setPersons(persons.filter(p => p.id !== idToDelete))          
         })
     }
   }
 
   return (
     <div style={{margin: 30}}>
-      <h2>Phonebook</h2>     
+      <h2>Phonebook</h2>   
+      <Notification message={errorMessage} errorType={errorType}/>        
       <Filter newFilter={newFilter}  handleFilterChange={handleFilterChange}/>
 
       <h2>Add New Person</h2>    
