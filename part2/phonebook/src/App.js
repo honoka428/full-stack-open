@@ -36,17 +36,23 @@ const App = () => {
   const [newFilter, setNewFilter] = useState('')
   const [showAll, setShowAll] = useState(true)
 
+  var personsToShow = showAll 
+    ? persons 
+    : persons.filter(person => person.name.toLowerCase().indexOf(newFilter.toLowerCase()) !== -1)
+
   useEffect(() => {
     PersonService.getAll()
       .then(initialPersons => {
         setPersons(initialPersons)
       })
+    
+    // Keep in useEffect to ensure UI reloads in real time when changes are made to phonebook
+    personsToShow = showAll 
+    ? persons
+    : persons.filter(person => person.name.toLowerCase().indexOf(newFilter.toLowerCase()) !== -1)   
+
   }, [])
 
-  const personsToShow = showAll 
-    ? persons
-    : persons.filter(person => person.name.toLowerCase().indexOf(newFilter.toLowerCase()) !== -1)
-  
   const addPerson = (event) => {
     event.preventDefault()
 
@@ -54,7 +60,7 @@ const App = () => {
 
     const personObject = {
       name: newName,
-      id: persons.length + 1,
+      id: Math.random(),
       number: newNumber
     }
 
@@ -64,12 +70,28 @@ const App = () => {
         return
       }
     })
-    
+
     if (!personExists) {
       setPersons(persons.concat(personObject))
       PersonService.create(personObject)
+    }
+
+    else if (personExists){
+      if (window.confirm('This person already exists. Do you want to replace the old number with a new one?')){
+        const id = persons.find(p => p.name === newName).id
+        const person = persons.find(p => p.id === id)
+        const modifiedObject = {...person, number: newNumber}
+
+        PersonService
+          .modify(modifiedObject, id)
+          .then(updatedPerson => {
+            setPersons(p => p.id !== id ? p : updatedPerson)
+          })
+        
+      } else return
+    }
     
-    } else {
+    else {
       alert(`${newName} is already added to phonebook`)
     }
 
@@ -92,13 +114,18 @@ const App = () => {
 
   const handleDeleteButton = (event) => {
     if (window.confirm("Are you sure you want to delete this person?")) { 
-      PersonService.remove(event.target.value)
-        .then(
-          persons.filter(person => person.id !== null)
-        )
-        .catch(
+      PersonService
+        .remove(event.target.value)
+        .then( () => {
+          const idToDelete = persons.find(p => String(p.id) === event.target.value).id
+          setPersons(persons.filter(p => p.id !== idToDelete))
+        })
+        .catch( err => {
+          console.log(err)
           alert(`This person was already deleted from the server`)
-        )
+          const idToDelete = persons.find(p => String(p.id) === event.target.value).id
+          setPersons(persons.filter(p => p.id !== idToDelete))
+        })
     }
   }
 

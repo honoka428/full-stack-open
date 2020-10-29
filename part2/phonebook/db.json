@@ -1,29 +1,19 @@
 {
   "persons": [
     {
-      "name": "Ada Lovelace",
-      "number": "39-44-5323523",
-      "id": 2
+      "name": "Sample Person ",
+      "id": 0.6897935154332444,
+      "number": "123-232-2333"
     },
     {
-      "name": "Dan Abramov",
-      "number": "12-43-234345",
-      "id": 3
+      "name": "Henry Matis",
+      "id": 0.22812432849717323,
+      "number": "2394-12-4-1"
     },
     {
-      "name": "Mary Poppendieck",
-      "number": "39-23-6423122",
-      "id": 4
-    },
-    {
-      "name": "Honoka Watanabe ",
-      "id": 5,
-      "number": "020-231-2313"
-    },
-    {
-      "name": "Monica Geller",
-      "id": 6,
-      "number": "102-342-1233"
+      "name": "Smith Jones",
+      "id": 0.16142721643538382,
+      "number": "194-1240-233"
     }
   ]
 }

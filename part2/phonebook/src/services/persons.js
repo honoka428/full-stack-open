@@ -12,9 +12,15 @@ const create = (personObject) => {
     return request.then(response => response.data)
 }
 
+// Returns a status code
 const remove = (id) => {
     const request = axios.delete(`${baseUrl}/${id}`)
+    return request.then(response => response.statusText).catch(error => {console.log('failed', error)})
+}
+
+const modify = (modifiedObject, id) => {
+    const request = axios.put(`${baseUrl}/${id}`, modifiedObject)
     return request.then(response => response.data).catch(error => {console.log('failed', error)})
 }
 
-export default {getAll, create, remove}
+export default {getAll, create, remove, modify}
