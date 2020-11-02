@@ -1,4 +1,5 @@
 const express = require('express')
+const bodyParser = require('body-parser')
 const app = express()
 
 let persons = [
@@ -30,6 +31,8 @@ var requestTime = function(req, res, next) {
 };
 
 app.use(requestTime);
+app.use(bodyParser.json())
+
 
 app.get('/', (req, res) => {
     res.send('<h1>Hello World!</h1>')
@@ -62,7 +65,16 @@ app.delete('/api/persons/:id', (req, res) => {
     persons = persons.filter(p => p.id !== id)
 
     res.status(204).end()
-  })
+})
+
+app.post('/api/persons', (req, res) => {
+    person = req.body
+    id = Math.random()
+    person.id = id
+    persons = persons.concat(person)
+
+    res.json(person)
+})
 
 const PORT = 3001
 app.listen(PORT, () => {
