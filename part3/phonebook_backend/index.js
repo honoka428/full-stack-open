@@ -1,5 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const morgan = require('morgan')
+
 const app = express()
 
 let persons = [
@@ -25,13 +27,21 @@ let persons = [
     }
 ]
 
+// Custom request time middleware
 var requestTime = function(req, res, next) {
     req.requestTime = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
     next();
 };
 
+// Custom token for morgan middleware
+morgan.token('content', function getContent (req) {
+    return JSON.stringify(req.body)
+  })
+  
+// Call middlewares
 app.use(requestTime);
 app.use(bodyParser.json())
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content'))
 
 
 app.get('/', (req, res) => {
