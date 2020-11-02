@@ -1,28 +1,29 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
+const cors = require('cors')
 
 const app = express()
 
 let persons = [
     {
       id: 1,
-      content: "Arto Hellas",
+      name: "Arto Hellas",
       number: "223-233-232"
     },
     {
         id: 2,
-        content: "Samuel Johnson",
+        name: "Samuel Johnson",
         number: "124-2451-3543"
     },
     {
         id: 3,
-        content: "Michelle Long",
+        name: "Michelle Long",
         number: "120-41-2332"
     },      
     {
         id: 4,
-        content: "Mary Smith",
+        name: "Mary Smith",
         number: "110-242-00-1"
     }
 ]
@@ -42,7 +43,7 @@ morgan.token('content', function getContent (req) {
 app.use(requestTime);
 app.use(bodyParser.json())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content'))
-
+app.use(cors())
 
 app.get('/', (req, res) => {
     res.send('<h1>Hello World!</h1>')
@@ -81,13 +82,13 @@ app.delete('/api/persons/:id', (req, res) => {
 app.post('/api/persons', (req, res) => {
     body = req.body
 
-    if (!body.content || !body.number) {
+    if (!body.name || !body.number) {
         return res.status(400).json({ 
             error: 'Name or number is missing' 
           })
     }
 
-    else if (persons.find(p => p.content == body.content)) {
+    else if (persons.find(p => p.name == body.name)) {
         return res.status(400).json({ 
             error: 'Name already exists' 
         })
