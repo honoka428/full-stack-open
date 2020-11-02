@@ -67,10 +67,28 @@ app.delete('/api/persons/:id', (req, res) => {
     res.status(204).end()
 })
 
+
 app.post('/api/persons', (req, res) => {
-    person = req.body
-    id = Math.random()
-    person.id = id
+    body = req.body
+
+    if (!body.content || !body.number) {
+        return res.status(400).json({ 
+            error: 'Name or number is missing' 
+          })
+    }
+
+    else if (persons.find(p => p.content == body.content)) {
+        return res.status(400).json({ 
+            error: 'Name already exists' 
+        })
+    }
+
+    person = {
+        id: Math.random(),
+        content: body.content,
+        number: body.number
+    }
+
     persons = persons.concat(person)
 
     res.json(person)
