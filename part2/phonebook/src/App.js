@@ -87,7 +87,13 @@ const App = () => {
 
     if (!personExists) {
       setPersons(persons.concat(personObject))
-      PersonService.create(personObject)
+      PersonService
+        .create(personObject)
+        .catch(error => {
+          // backup server error handling in case personExists check in frontend fails
+          setErrorType('redError')
+          setErrorMessage (error.response.data)
+        })
       setErrorType('greenError')
       setErrorMessage('Person Added Successfully')
       setTimeout(() => {
