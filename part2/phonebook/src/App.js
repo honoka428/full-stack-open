@@ -97,14 +97,21 @@ const App = () => {
 
     else if (personExists){
       if (window.confirm('This person already exists. Do you want to replace the old number with a new one?')){
-        const id = persons.find(p => p.name === newName).id
-        const person = persons.find(p => p.id === id)
-        const modifiedObject = {...person, number: newNumber}
+
+        // Find appropriate person to replace create new obj of what updated person should be
+        const personToReplace = persons.find(p => p.name === newName)
+        const id = personToReplace.id
+        const modifiedObject = {...personToReplace, number: newNumber}
+
+        // Update the entire persons list with new number
+        const indexToUpdate = persons.findIndex(p  => p.id === id)
+        const updatedPersons = [...persons]
+        updatedPersons[indexToUpdate] = {...persons[indexToUpdate], number: newNumber}
 
         PersonService
           .modify(modifiedObject, id)
-          .then(updatedPerson => {
-            setPersons(p => p.id !== id ? p : updatedPerson)
+          .then(res => {
+            setPersons(updatedPersons)
             setErrorType('greenError')
             setErrorMessage('Number replaced succesfully')
             setTimeout(() => {
