@@ -37,4 +37,12 @@ blogsRouter.delete('/:id', async (req, res) => {
   
   res.status(204).end()
 })
+
+blogsRouter.post('/:id', async (req, res) => {
+  const body = req.body // would be obj with new values
+
+  await Blog.updateOne({author: body.author}, {likes: body.likes}) //Update specified author with the new likes
+  res.json(Blog)
+})
+
 module.exports = blogsRouter

@@ -1,0 +1,9 @@
+POST http://localhost:3001/api/blogs/5fa317bdb12a05c6465fc92e
+Content-Type: application/json
+
+{
+    "title": "Sample Blog",
+    "author": "Honoka Watanabe",
+    "url": "blogurl.com",
+    "likes": 10
+}
