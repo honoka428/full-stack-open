@@ -15,8 +15,12 @@ blogsRouter.get('/', (req, res) => {
 })
   
 blogsRouter.post('/', (req, res) => {
-  if (req.body.likes == undefined) {
+  if (req.body.likes == null) {
     req.body.likes = 0
+  }
+
+  else if (req.body.title == null && req.body.url == null) {
+    return res.status(400).end()
   }
 
   const blog = new Blog(req.body)

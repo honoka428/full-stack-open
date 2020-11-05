@@ -62,6 +62,18 @@ describe('adding a new blog', () => {
         const response = await api.get('/api/blogs')
         expect(response.body[2].likes).toBe(0)
     })  
+
+    test('missing title and url returns 400 status', async () => {
+        const newBlog = {
+            author: 'Michelle Lee',
+            likes: 2
+        }
+
+        await api
+            .post('/api/blogs')
+            .send(newBlog)
+            .expect(400)
+    })      
 })
 
 afterAll(() => {
