@@ -27,6 +27,27 @@ test('id is defined', async () => {
     expect(response.body[0].id).toBeDefined()
 })
 
+describe('adding a new blog', () => {
+    const newBlog = {
+        title: 'Adding New Blog',
+        author: 'Michelle Lee',
+        url: 'https:12321.com',
+        likes: 2
+    }
+
+    test('successful post', async () => {
+        await api
+            .post('/api/blogs')
+            .send(newBlog)
+            .expect(201)
+            .expect('Content-Type', /application\/json/)
+    
+        const response = await api.get('/api/blogs')
+        expect(response.body.length).toBe(3)
+        expect(response.body[2].author).toBe('Michelle Lee')
+    })    
+})
+
 afterAll(() => {
     mongoose.connection.close()
 })
