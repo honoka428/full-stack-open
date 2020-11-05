@@ -5,6 +5,7 @@ const mongoose = require('mongoose')
 const config = require('./utils/config')
 const logger = require('./utils/logger')
 const blogsRouter = require('./controllers/blogs')
+const usersRouter = require('./controllers/users')
 const middleware = require('./utils/middleware')
 require('express-async-errors')
 
@@ -25,6 +26,7 @@ app.use(cors()) // allow api connections from multiple endpoints
 // app.use(express.static(build))
 app.use(express.json()) // parse all json 
 app.use('/api/blogs', blogsRouter) // use /api/blogs are root route for all requests in blogsRouter
+app.use('/api/users', usersRouter) // use /api/blogs are root route for all requests in blogsRouter
 app.use(middleware.requestLogger) // custom middleware for error handling and logging
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
