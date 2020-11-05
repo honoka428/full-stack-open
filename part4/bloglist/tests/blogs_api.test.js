@@ -28,14 +28,15 @@ test('id is defined', async () => {
 })
 
 describe('adding a new blog', () => {
-    const newBlog = {
-        title: 'Adding New Blog',
-        author: 'Michelle Lee',
-        url: 'https:12321.com',
-        likes: 2
-    }
 
     test('successful post', async () => {
+        const newBlog = {
+            title: 'Adding New Blog',
+            author: 'Michelle Lee',
+            url: 'https:12321.com',
+            likes: 2
+        }
+                
         await api
             .post('/api/blogs')
             .send(newBlog)
@@ -45,7 +46,22 @@ describe('adding a new blog', () => {
         const response = await api.get('/api/blogs')
         expect(response.body.length).toBe(3)
         expect(response.body[2].author).toBe('Michelle Lee')
-    })    
+    })  
+    
+    test('defaults missing likes prop with value of 0', async () => {
+        const newBlog = {
+            title: 'Adding New Blog',
+            author: 'Michelle Lee',
+            url: 'https:12321.com'
+        }
+
+        await api
+            .post('/api/blogs')
+            .send(newBlog)
+    
+        const response = await api.get('/api/blogs')
+        expect(response.body[2].likes).toBe(0)
+    })  
 })
 
 afterAll(() => {
