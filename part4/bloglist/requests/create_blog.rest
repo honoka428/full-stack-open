@@ -5,5 +5,5 @@ Content-Type: application/json
     "title": "Sample Blog",
     "author": "Honoka Watanabe",
     "url": "blogurl.com",
-    "likes": 3
+    "likes": 3 
 }

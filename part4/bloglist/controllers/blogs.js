@@ -2,19 +2,17 @@
 
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
-const logger = require('../utils/logger')
+const User = require('../models/user')
 
 // Root route is equiv. to /api/blogs because of 
 // app.use('/api/blogs/', blogsRouter) declaration in app.js
-blogsRouter.get('/', (req, res) => {
-  Blog
-    .find({})
-    .then(blogs => {
-      res.json(blogs)
-    })
+blogsRouter.get('/', async(req, res) => {
+  const blogs = await Blog
+    .find({}).populate('user', { username: 1, name: 1})
+    res.json(blogs)  
 })
   
-blogsRouter.post('/', (req, res) => {
+blogsRouter.post('/', async(req, res) => {
   if (req.body.likes == null) {
     req.body.likes = 0
   }
@@ -24,18 +22,17 @@ blogsRouter.post('/', (req, res) => {
   }
 
   const blog = new Blog(req.body)
-
-  blog
-    .save()
-    .then(result => {
-      res.status(201).json(result)
-    })
+  const user = await User.findOne({name: 'Henry'}) //hardcoded for now
+  
+  blog.user = user
+  const savedBlog = await blog.save()
+  res.json(savedBlog)
 })
 
 blogsRouter.delete('/:id', async (req, res) => {
-  await Blog.findOneAndDelete({id: req.id})
+  const deleted = await Blog.findOneAndDelete({"id": req.id})
   
-  res.status(204).end()
+  res.json(deleted)
 })
 
 blogsRouter.post('/:id', async (req, res) => {
