@@ -1,5 +1,4 @@
 // File to handle errors that may arise in app 
-
 const logger = require('./logger')
 
 const requestLogger = (request, response, next) => {
@@ -7,6 +6,19 @@ const requestLogger = (request, response, next) => {
   logger.info('Path:  ', request.path)
   logger.info('Body:  ', request.body)
   logger.info('---')
+  next()
+}
+
+// Helper function to grab web token from login request
+const tokenExtractor = (req, res, next) => {
+  const authorization = req.get('authorization') // get auth header content
+  
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    req.token = authorization.substring(7) // remove 'bearer ' and return only token
+  }
+   else {
+    request.token =  null
+  }
   next()
 }
 
@@ -31,5 +43,6 @@ const errorHandler = (error, request, response, next) => {
 module.exports = {
   requestLogger,
   unknownEndpoint,
-  errorHandler
+  errorHandler,
+  tokenExtractor
 }

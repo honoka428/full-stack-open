@@ -4,8 +4,8 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5vc
 # eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG5kb2UiLCJpZCI6IjVmYTVhMzQ2YWQwMzRiZmU1NGJhMjQ1MSIsImlhdCI6MTYwNDY5Mjc4Nn0.BYY4eQ0N9R-VzX6aiIJfoomx5ncH4LjeCiSdd0JrUA8
 
 {
-    "title": "Sample Blog",
-    "author": "Honoka Watanabe",
-    "url": "blogurl.com",
-    "likes": 3 
+    "title": "This is my second Blog",
+    "author": "Samantha Williams",
+    "url": "fsdfs.com",
+    "likes": 10
 }

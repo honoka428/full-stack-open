@@ -4,14 +4,7 @@ const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
 
-// Helper function to grab web token from login request
-const getTokenFrom = request => {
-  const authorization = request.get('authorization') // get auth header content
-  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-    return authorization.substring(7) // remove 'bearer ' and return only token
-  }
-  return null
-}
+
 
 // Root route is equiv. to /api/blogs because of 
 // app.use('/api/blogs/', blogsRouter) declaration in app.js
@@ -33,12 +26,10 @@ blogsRouter.post('/', async(req, res, next) => {
     }
 
     const blog = new Blog(req.body)
-    const token = getTokenFrom(req)
+    const decodedToken = jwt.verify(req.token, process.env.SECRET) // validates token and returns {username, id, iad}
 
-    const decodedToken = jwt.verify(token, process.env.SECRET) // validates token and returns {username, id, iad}
-
-    if (!token || !decodedToken.id) {
-      return response.status(401).json({ error: 'token missing or invalid' })
+    if (!req.token || !decodedToken.id) {
+      return res.status(401).json({ error: 'token missing or invalid' })
     }
 
     const user = await User.findById(decodedToken.id)  
