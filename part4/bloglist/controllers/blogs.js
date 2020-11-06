@@ -3,8 +3,7 @@ const jwt = require('jsonwebtoken')
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
-
-
+const logger = require('../utils/logger')
 
 // Root route is equiv. to /api/blogs because of 
 // app.use('/api/blogs/', blogsRouter) declaration in app.js
@@ -28,10 +27,6 @@ blogsRouter.post('/', async(req, res, next) => {
     const blog = new Blog(req.body)
     const decodedToken = jwt.verify(req.token, process.env.SECRET) // validates token and returns {username, id, iad}
 
-    if (!req.token || !decodedToken.id) {
-      return res.status(401).json({ error: 'token missing or invalid' })
-    }
-
     const user = await User.findById(decodedToken.id)  
     
     blog.user = user
@@ -41,10 +36,23 @@ blogsRouter.post('/', async(req, res, next) => {
   catch(err){ next(err)}
 })
 
-blogsRouter.delete('/:id', async (req, res) => {
-  const deleted = await Blog.findOneAndDelete({"id": req.id})
-  
-  res.json(deleted)
+blogsRouter.delete('/:id', async (req, res, next) => {
+
+  try{
+    const decodedToken = jwt.verify(req.token, process.env.SECRET) // validates token and returns {username, id, iad}
+    
+    const tokenMatchId = await User.findById(decodedToken.id).id
+    const blogToDeleteId = await Blog.findById({"id": req.id}).id
+
+    logger.info(tokenMatchId, blogToDeleteId)
+
+    if (tokenMatchId == blogToDeleteId) {
+      const deleted = await Blog.findOneAndDelete({"id": req.id})
+      res.json(deleted)
+    }
+  }
+  catch(err){next(err)}
+
 })
 
 blogsRouter.post('/:id', async (req, res) => {
