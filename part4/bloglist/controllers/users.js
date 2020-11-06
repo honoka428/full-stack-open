@@ -14,21 +14,37 @@ usersRouter.get('/', (req, res) => {
     })
 })
   
-usersRouter.post('/', async (request, response) => {
-    const body = request.body
-  
-    const saltRounds = 10
-    const passwordHash = await bcrypt.hash(body.password, saltRounds)
-  
-    const user = new User({
-      username: body.username,
-      name: body.name,
-      passwordHash,
-    })
-  
-    const savedUser = await user.save()
-  
-    response.json(savedUser)
+usersRouter.post('/', async (request, response, next) => {
+    try {
+        const body = request.body
+
+        if (body.username.length == 0 || body.password.length == 0 ) {
+            response.status(400).json({ error: 'username and password cannot be empty' })
+        }
+
+        else if (body.password.length < 3) {
+            response.status(400).json({ error: 'password must be 3 characters or longer' })
+        }
+
+        else if (body.username.length < 3) {
+            response.status(400).json({ error: 'username must be 3 characters or longer' })
+        }
+
+        else {
+            const saltRounds = 10
+            const passwordHash = await bcrypt.hash(body.password, saltRounds)
+    
+            const user = new User({
+                username: body.username,
+                name: body.name,
+                passwordHash
+            })
+        
+            const savedUser = await user.save()
+            response.json(savedUser)
+        }
+    }
+    catch(err){ next(err)}
 })
 
 module.exports = usersRouter
