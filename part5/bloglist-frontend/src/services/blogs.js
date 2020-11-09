@@ -6,4 +6,15 @@ const getAll = () => {
   return request.then(response => response.data)
 }
 
-export default { getAll }
+const createOne = async(authToken, blog) => {
+  console.log('inside createONe')
+  const request = await axios.post(baseUrl, blog, {
+    headers: {
+      'Authorization': authToken
+    }
+  })
+  console.log(request)
+  return request.data
+}
+
+export default { getAll, createOne }

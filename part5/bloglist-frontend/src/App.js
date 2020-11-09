@@ -9,11 +9,24 @@ const App = () => {
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('') 
   const [errorMessage, setErrorMessage] = useState('')
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+  const [token, setToken] = useState('')
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
     )  
+  })
+
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      setToken(`bearer ${user.token}`)
+    }
   }, [])
 
   const handleLogin = async (event) => {
@@ -28,8 +41,6 @@ const App = () => {
         'loggedNoteappUser', JSON.stringify(user)
       ) 
       
-      console.log(window.localStorage.getItem('loggedNoteappUser'))
-
       setUser(user)
       setUsername('')
       setPassword('')
@@ -49,6 +60,7 @@ const App = () => {
       setUser(null)
       setUsername('')
       setPassword('')
+      window.localStorage.clear()
     }
     catch(err){
       console.log(err)
@@ -58,8 +70,31 @@ const App = () => {
       }, 5000)
     }
   }
+
+  const handleCreateBlog = async event => {
+    event.preventDefault()
+
+    const newBlog = {
+      "title": title,
+      "author": author,
+      "url": url
+    }
+    try {
+      await blogService.createOne(token, newBlog)
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+    }
+    catch(err) {
+      console.log(err)
+      setErrorMessage('There was a problem logging you out. Please try again later.')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
   
-  const loginForm = () => (
+  const loginForm = () =>
     <form onSubmit={handleLogin}>
       <div>
         username
@@ -81,31 +116,59 @@ const App = () => {
       </div>
       <button type="submit">login</button>
     </form>      
-  )
 
-  const logoutForm = user => (
+  const logoutForm = user =>
     <form onSubmit={handleLogout}>
       <div>
         Hello, {user.name}!
       </div>
       <button type="submit">logout</button>
     </form>      
-  )
 
-  const blogList = () => (
+  const blogList = () =>
     <div>
       <h2>blogs</h2>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
     </div> 
-  )
 
-  const Notification = props => (
+  const Notification = props =>
     <div>
       <p>{props.errorMessage}</p>
     </div>
-  )
+
+  const createBlog = () => 
+    <form onSubmit={handleCreateBlog}>
+      <div>
+        title
+            <input
+            type="text"
+            value={title}
+            name="Title"
+            onChange={({ target }) => setTitle(target.value)}
+          /> 
+      </div>
+      <div>
+        author
+            <input
+            type="text"
+            value={author}
+            name="Author"
+            onChange={({ target }) => setAuthor(target.value)}
+          /> 
+      </div>
+      <div>
+        url
+            <input
+            type="text"
+            value={url}
+            name="URL"
+            onChange={({ target }) => setUrl(target.value)}
+          /> 
+      </div>            
+      <button type="submit">create</button>
+    </form>     
 
   return (
     <div>
@@ -115,7 +178,7 @@ const App = () => {
       {user === null && loginForm()}
       {user !== null && logoutForm(user)}
       {user !== null && blogList()}
-
+      {user !== null && createBlog()}
     </div>
   )
 }
