@@ -23,16 +23,40 @@ const App = () => {
       const user = await loginService.login({
         username, password,
       })
+
+      window.localStorage.setItem(
+        'loggedNoteappUser', JSON.stringify(user)
+      ) 
+      
+      console.log(window.localStorage.getItem('loggedNoteappUser'))
+
       setUser(user)
       setUsername('')
       setPassword('')
-    } catch (exception) {
-      console.log(exception)
+    } catch (err) {
+      console.log(err)
       setErrorMessage('Wrong credentials')
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
     }    
+  }
+
+  const handleLogout = event => {
+    event.preventDefault()
+
+    try {
+      setUser(null)
+      setUsername('')
+      setPassword('')
+    }
+    catch(err){
+      console.log(err)
+      setErrorMessage('There was a problem logging you out. Please try again later.')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
   }
   
   const loginForm = () => (
@@ -59,6 +83,15 @@ const App = () => {
     </form>      
   )
 
+  const logoutForm = user => (
+    <form onSubmit={handleLogout}>
+      <div>
+        Hello, {user.name}!
+      </div>
+      <button type="submit">logout</button>
+    </form>      
+  )
+
   const blogList = () => (
     <div>
       <h2>blogs</h2>
@@ -80,6 +113,7 @@ const App = () => {
       <Notification message={errorMessage} />
 
       {user === null && loginForm()}
+      {user !== null && logoutForm(user)}
       {user !== null && blogList()}
 
     </div>
