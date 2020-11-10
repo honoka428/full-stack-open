@@ -22,7 +22,7 @@ const updateOne = async updatedBlog => {
   const id = updatedBlog.user.id
 
   const request = await axios.put(`${baseUrl}/${id}`, updatedBlog)
-  
+
   console.log(request)
   return request.data
 }
@@ -34,7 +34,7 @@ const deleteOne = async idToDelete => {
   console.log(idToDelete)
 
   const request = await axios.delete(`${baseUrl}/${idToDelete}`)
-  
+
   console.log(request)
   return request.data
 

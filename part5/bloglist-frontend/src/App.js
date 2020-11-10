@@ -5,14 +5,14 @@ import { LoginForm } from './components/Login'
 import { LogoutForm } from './components/Logout'
 import { Toggleable } from './components/Toggleable'
 import blogService from './services/blogs'
-import loginService from './services/login' 
+import loginService from './services/login'
 import './App.css'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [username, setUsername] = useState('') 
-  const [password, setPassword] = useState('') 
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
   const [errorType, setErrorType] = useState('greenError')
   const [token, setToken] = useState('')
@@ -21,7 +21,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   })
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const App = () => {
 
       window.localStorage.setItem(
         'loggedNoteappUser', JSON.stringify(user)
-      ) 
+      )
       setUser(user)
       setErrorMessage('Successfully logged in.')
       setErrorType('greenError')
@@ -56,7 +56,7 @@ const App = () => {
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
-    }    
+    }
   }
 
   const handleLogout = event => {
@@ -69,7 +69,7 @@ const App = () => {
       setToken('')
       window.localStorage.clear()
       setErrorMessage('Successfully logged out.')
-      setErrorType('greenError')            
+      setErrorType('greenError')
     }
     catch(err){
       console.log(err)
@@ -81,8 +81,8 @@ const App = () => {
   }
 
   const loginForm = () =>
-    <LoginForm 
-      handleLogin={handleLogin}  
+    <LoginForm
+      handleLogin={handleLogin}
       setUsername={setUsername}
       setPassword={setPassword}
       username={username}
@@ -90,7 +90,7 @@ const App = () => {
     />
 
   const logoutForm = user =>
-    <LogoutForm 
+    <LogoutForm
       handleLogout={handleLogout}
       user={user}
     />
@@ -110,7 +110,7 @@ const App = () => {
         setErrorMessage(null)
       }, 5000)
     }
-  } 
+  }
 
   const deleteBlog = async idToDelete => {
     try {
@@ -134,7 +134,7 @@ const App = () => {
       {blogs
         .sort((a, b) => a.likes - b.likes) // if a.likes - b.likes returns negative, sort a.likes first
         .map(blog =>
-          <Blog 
+          <Blog
             key={blog.id}
             blog={blog}
             likeBlog={likeBlog}
@@ -143,7 +143,7 @@ const App = () => {
           />
         )
       }
-  </div> 
+    </div>
 
   const Notification = props =>
     <div id={errorType}>
@@ -168,14 +168,14 @@ const App = () => {
     }
   }
 
-  const blogForm = () => 
-    <Toggleable 
+  const blogForm = () =>
+    <Toggleable
       buttonLabel='new blog'
       setVisible={setVisible}
       visible={visible}
     >
-      <BlogForm createBlog={createBlog}/>   
-    </Toggleable> 
+      <BlogForm createBlog={createBlog}/>
+    </Toggleable>
 
   return (
     <div>

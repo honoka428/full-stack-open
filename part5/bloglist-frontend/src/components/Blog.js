@@ -23,11 +23,11 @@ const Blog = ({ blog, likeBlog, deleteBlog, user }) => {
 
   const handleLike = () => {
     likeBlog({
-      "user": blog.user,
-      "title": blog.title,
-      "author": blog.author,
-      "url": blog.url,
-      "likes": blog.likes + 1
+      'user': blog.user,
+      'title': blog.title,
+      'author': blog.author,
+      'url': blog.url,
+      'likes': blog.likes + 1
     })
   }
 
@@ -40,7 +40,7 @@ const Blog = ({ blog, likeBlog, deleteBlog, user }) => {
 
   const deleteButton = () => <button onClick={handleDelete}> delete </button>
 
-  const allBlogDetails = () => 
+  const allBlogDetails = () =>
     <div>
       {blog.title} <button onClick={toggleDetailsView}> hide </button> <br/>
       url: {blog.url} <br/>
@@ -56,11 +56,10 @@ const Blog = ({ blog, likeBlog, deleteBlog, user }) => {
   return (
     <div style={blogStyle}>
       { detailsVisible === true
-          ? allBlogDetails()
-          : blogNameOnly()
+        ? allBlogDetails()
+        : blogNameOnly()
       }
     </div>
-
   )
 }
 
