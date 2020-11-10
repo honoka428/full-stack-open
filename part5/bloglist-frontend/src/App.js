@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import Blog from './components/Blog'
+import {Blog, BlogForm} from './components/Blog'
+import {LoginForm} from './components/Login'
+import {LogoutForm} from './components/Logout'
 import blogService from './services/blogs'
 import loginService from './services/login' 
 import './App.css'
@@ -44,8 +46,6 @@ const App = () => {
       ) 
       
       setUser(user)
-      setUsername('')
-      setPassword('')
       setErrorMessage('Successfully logged in.')
       setErrorType('greenError')
 
@@ -99,7 +99,7 @@ const App = () => {
     }
     catch(err) {
       console.log(err)
-      setErrorMessage('There was a problem logging you out. Please try again later.')
+      setErrorMessage('There was a problem creating your blog post.')
       setErrorType('redError')
       setTimeout(() => {
         setErrorMessage(null)
@@ -108,43 +108,28 @@ const App = () => {
   }
   
   const loginForm = () =>
-    <form onSubmit={handleLogin}>
-      <div>
-        username
-          <input
-          type="text"
-          value={username}
-          name="Username"
-          onChange={({ target }) => setUsername(target.value)}
-        />
-      </div>
-      <div>
-        password
-          <input
-          type="password"
-          value={password}
-          name="Password"
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <button type="submit">login</button>
-    </form>      
+    <LoginForm 
+      handleLogin={handleLogin}  
+      setUsername={setUsername}
+      setPassword={setPassword}
+      username={username}
+      password={password}
+    />
 
   const logoutForm = user =>
-    <form onSubmit={handleLogout}>
-      <div>
-        Hello, {user.name}!
-      </div>
-      <button type="submit">logout</button>
-    </form>      
+    <LogoutForm 
+      handleLogout={handleLogout}
+      user={user}
+    />
 
+//KEEP HERE
   const blogList = () =>
     <div>
       <h2>blogs</h2>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
-    </div> 
+  </div> 
 
   const Notification = props =>
     <div id={errorType}>
@@ -152,36 +137,15 @@ const App = () => {
     </div>
 
   const createBlog = () => 
-    <form onSubmit={handleCreateBlog}>
-      <div>
-        title
-            <input
-            type="text"
-            value={title}
-            name="Title"
-            onChange={({ target }) => setTitle(target.value)}
-          /> 
-      </div>
-      <div>
-        author
-            <input
-            type="text"
-            value={author}
-            name="Author"
-            onChange={({ target }) => setAuthor(target.value)}
-          /> 
-      </div>
-      <div>
-        url
-            <input
-            type="text"
-            value={url}
-            name="URL"
-            onChange={({ target }) => setUrl(target.value)}
-          /> 
-      </div>            
-      <button type="submit">create</button>
-    </form>     
+    <BlogForm 
+      handleCreateBlog={handleCreateBlog}
+      setTitle={setTitle}
+      setAuthor={setAuthor}
+      setUrl={setUrl}
+      title={title}
+      author={author}
+      url={url}
+    />    
 
   return (
     <div>
@@ -191,7 +155,11 @@ const App = () => {
       {user === null && loginForm()}
       {user !== null && logoutForm(user)}
       {user !== null && blogList()}
-      {user !== null && createBlog()}
+      {user !== null && createBlog(
+        handleCreateBlog,
+        setAuthor,
+        setUrl
+      )}
     </div>
   )
 }

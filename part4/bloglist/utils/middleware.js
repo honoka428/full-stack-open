@@ -11,17 +11,13 @@ const requestLogger = (request, response, next) => {
 
 // Helper function to grab web token from login request
 const tokenExtractor = (req, res, next) => {
-  console.log('inside tokenExtractor')
   const authorization = req.get('authorization') // get auth header content
   
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
     console.log('request starts with bearer')
     req.token = authorization.substring(7) // remove 'bearer ' and return only token
   }
-   else {
-    console.log('request DOESNT start with bearer')
-    req.token =  null
-  }
+
   next()
 }
 
