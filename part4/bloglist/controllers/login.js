@@ -14,8 +14,9 @@ loginRouter.post('/', async (request, response) => {
     ? false
     : await bcrypt.compare(body.password, user.passwordHash)
 
-    // console.log(user)
-  if (!(user && passwordCorrect)) {
+    console.log(user)
+  
+    if (!(user && passwordCorrect)) {
     return response.status(401).json({
       error: 'invalid username or password'
     })
@@ -30,7 +31,7 @@ loginRouter.post('/', async (request, response) => {
 
   response
     .status(200)
-    .send({ token, username: user.username, name: user.name })
+    .send({ token, username: user.username, name: user.name, id: user._id })
 })
 
 module.exports = loginRouter

@@ -2,6 +2,7 @@ import React from 'react'
 
 const LoginForm = props => 
     <form onSubmit={props.handleLogin}>
+      <h2> Login </h2>
       <div>
         username
           <input

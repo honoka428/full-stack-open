@@ -38,13 +38,12 @@ const App = () => {
 
     try {
       const user = await loginService.login({
-        username, password,
+        username, password
       })
 
       window.localStorage.setItem(
         'loggedNoteappUser', JSON.stringify(user)
       ) 
-      
       setUser(user)
       setErrorMessage('Successfully logged in.')
       setErrorType('greenError')
@@ -67,6 +66,7 @@ const App = () => {
       setUser(null)
       setUsername('')
       setPassword('')
+      setToken('')
       window.localStorage.clear()
       setErrorMessage('Successfully logged out.')
       setErrorType('greenError')            
@@ -97,7 +97,7 @@ const App = () => {
 
   const likeBlog = async updatedBlog => {
     try {
-      await blogService.updateOne(token, updatedBlog)
+      await blogService.updateOne(updatedBlog)
       setErrorMessage(`Successfully liked ${updatedBlog.title}`)
       setErrorType('greenError')
     }
@@ -112,13 +112,35 @@ const App = () => {
     }
   } 
 
+  const deleteBlog = async idToDelete => {
+    try {
+      await blogService.deleteOne(idToDelete)
+      setErrorMessage('Successfully deleted blog.')
+      setErrorType('greenError')
+    }
+    catch(err){
+      console.log(err)
+      setErrorMessage('There was a problem deleting your blog post.')
+      setErrorType('redError')
+    }
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000)
+  }
+
   const blogList = () =>
     <div>
       <h2>blogs</h2>
       {blogs
         .sort((a, b) => a.likes - b.likes) // if a.likes - b.likes returns negative, sort a.likes first
         .map(blog =>
-          <Blog key={blog.id} blog={blog} likeBlog={likeBlog}/>
+          <Blog 
+            key={blog.id}
+            blog={blog}
+            likeBlog={likeBlog}
+            deleteBlog={deleteBlog}
+            user={user}
+          />
         )
       }
   </div> 
@@ -157,7 +179,7 @@ const App = () => {
 
   return (
     <div>
-      <h1>Login</h1>
+      <h1>Blog List</h1>
       <Notification message={errorMessage} />
 
       {user === null ? loginForm() : logoutForm(user)}

@@ -28,7 +28,7 @@ blogsRouter.post('/', async(req, res, next) => {
     const decodedToken = jwt.verify(req.token, process.env.SECRET) // validates token and returns {username, id, iad}
 
     const user = await User.findById(decodedToken.id)  
-    
+    console.log(user)
     blog.user = user
     const savedBlog = await blog.save()
     res.status(201).json(savedBlog)
@@ -36,29 +36,21 @@ blogsRouter.post('/', async(req, res, next) => {
   catch(err){ next(err)}
 })
 
-blogsRouter.delete('/:id', async (req, res, next) => {
-
-  try{
-    const decodedToken = jwt.verify(req.token, process.env.SECRET) // validates token and returns {username, id, iad}
-    
-    const tokenMatchId = await User.findById(decodedToken.id).id
-    const blogToDeleteId = await Blog.findById({"id": req.id}).id
-
-    logger.info(tokenMatchId, blogToDeleteId)
-
-    if (tokenMatchId == blogToDeleteId) {
-      const deleted = await Blog.findOneAndDelete({"id": req.id})
-      res.json(deleted)
-    }
-  }
-  catch(err){next(err)}
-
-})
-
 blogsRouter.put('/:id', async (req, res) => {
   const body = req.body // would be obj with new values
 
   await Blog.updateOne({author: body.author}, {likes: body.likes}) //Update specified author with the new likes
+  res.json(Blog)
+})
+
+blogsRouter.delete('/:id', async (req, res) => {
+  console.log('inside delete')
+
+  const id = req.params.id
+
+  const result = await Blog.findByIdAndDelete(id)
+  console.log(`Deleted: ${result}`)
+
   res.json(Blog)
 })
 

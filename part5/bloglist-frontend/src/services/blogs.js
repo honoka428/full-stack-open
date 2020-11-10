@@ -17,16 +17,27 @@ const createOne = async(authToken, blog) => {
   return request.data
 }
 
-const updateOne = async(authToken, updatedBlog) => {
+const updateOne = async updatedBlog => {
   console.log('inside update one')
   const id = updatedBlog.user.id
 
-  const request = await axios.put(`${baseUrl}/${id}`, updatedBlog, {
-    headers: {
-      'Authorization': authToken
-    }
-  })
+  const request = await axios.put(`${baseUrl}/${id}`, updatedBlog)
+  
   console.log(request)
   return request.data
 }
-export default { getAll, createOne, updateOne }
+
+// For DELETE requests only send the id to the server.
+// Only send data as request body for PUT, POST requests.
+const deleteOne = async idToDelete => {
+  console.log('inside delete one')
+  console.log(idToDelete)
+
+  const request = await axios.delete(`${baseUrl}/${idToDelete}`)
+  
+  console.log(request)
+  return request.data
+
+}
+
+export default { getAll, createOne, updateOne, deleteOne }
