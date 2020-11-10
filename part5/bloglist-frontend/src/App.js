@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login' 
+import './App.css'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -9,6 +10,7 @@ const App = () => {
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('') 
   const [errorMessage, setErrorMessage] = useState('')
+  const [errorType, setErrorType] = useState('greenError')
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -44,9 +46,14 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
+      setErrorMessage('Successfully logged in.')
+      setErrorType('greenError')
+
     } catch (err) {
       console.log(err)
       setErrorMessage('Wrong credentials')
+      setErrorType('redError')
+
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
@@ -61,6 +68,8 @@ const App = () => {
       setUsername('')
       setPassword('')
       window.localStorage.clear()
+      setErrorMessage('Successfully logged out.')
+      setErrorType('greenError')            
     }
     catch(err){
       console.log(err)
@@ -79,15 +88,19 @@ const App = () => {
       "author": author,
       "url": url
     }
+
     try {
       await blogService.createOne(token, newBlog)
       setTitle('')
       setAuthor('')
       setUrl('')
+      setErrorMessage('Successfully created blog post.')
+      setErrorType('greenError')
     }
     catch(err) {
       console.log(err)
       setErrorMessage('There was a problem logging you out. Please try again later.')
+      setErrorType('redError')
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
@@ -134,8 +147,8 @@ const App = () => {
     </div> 
 
   const Notification = props =>
-    <div>
-      <p>{props.errorMessage}</p>
+    <div id={errorType}>
+      <p>{props.message}</p>
     </div>
 
   const createBlog = () => 

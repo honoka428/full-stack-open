@@ -36,3 +36,15 @@
     transform: rotate(360deg);
   }
 }
+
+#greenError {
+  border-color: green;
+  background-color: rgb(201, 247, 201);
+  color: green;
+}
+
+#redError {
+  border-color: red;
+  background-color: rgb(247, 201, 201);
+  color: red;
+}
