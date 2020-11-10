@@ -17,6 +17,7 @@ const App = () => {
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
   const [token, setToken] = useState('')
+  const [blogFormVisible, setBlogFormVisible] = useState(false)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -96,6 +97,7 @@ const App = () => {
       setUrl('')
       setErrorMessage('Successfully created blog post.')
       setErrorType('greenError')
+      setBlogFormVisible(false)
     }
     catch(err) {
       console.log(err)
@@ -122,7 +124,6 @@ const App = () => {
       user={user}
     />
 
-//KEEP HERE
   const blogList = () =>
     <div>
       <h2>blogs</h2>
@@ -145,6 +146,8 @@ const App = () => {
       title={title}
       author={author}
       url={url}
+      blogFormVisible={blogFormVisible}
+      setBlogFormVisible={setBlogFormVisible}
     />    
 
   return (
@@ -155,11 +158,7 @@ const App = () => {
       {user === null && loginForm()}
       {user !== null && logoutForm(user)}
       {user !== null && blogList()}
-      {user !== null && createBlog(
-        handleCreateBlog,
-        setAuthor,
-        setUrl
-      )}
+      {user !== null && createBlog()}
     </div>
   )
 }
