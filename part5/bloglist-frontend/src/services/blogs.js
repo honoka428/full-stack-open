@@ -17,4 +17,16 @@ const createOne = async(authToken, blog) => {
   return request.data
 }
 
-export default { getAll, createOne }
+const updateOne = async(authToken, updatedBlog) => {
+  console.log('inside update one')
+  const id = updatedBlog.user.id
+
+  const request = await axios.put(`${baseUrl}/${id}`, updatedBlog, {
+    headers: {
+      'Authorization': authToken
+    }
+  })
+  console.log(request)
+  return request.data
+}
+export default { getAll, createOne, updateOne }

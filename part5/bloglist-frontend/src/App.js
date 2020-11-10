@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Blog } from './components/Blog'
-import { BlogForm } from './components/BlogFrom'
+import { BlogForm } from './components/BlogForm'
 import { LoginForm } from './components/Login'
 import { LogoutForm } from './components/Logout'
 import { Toggleable } from './components/Toggleable'
@@ -95,11 +95,28 @@ const App = () => {
       user={user}
     />
 
+  const likeBlog = async updatedBlog => {
+    try {
+      await blogService.updateOne(token, updatedBlog)
+      setErrorMessage(`Successfully liked ${updatedBlog.title}`)
+      setErrorType('greenError')
+    }
+
+    catch(err) {
+      console.log(err)
+      setErrorMessage('There was a problem liking this blog post.')
+      setErrorType('redError')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  } 
+
   const blogList = () =>
     <div>
       <h2>blogs</h2>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} likeBlog={likeBlog}/>
       )}
   </div> 
 

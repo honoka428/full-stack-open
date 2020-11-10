@@ -55,7 +55,7 @@ blogsRouter.delete('/:id', async (req, res, next) => {
 
 })
 
-blogsRouter.post('/:id', async (req, res) => {
+blogsRouter.put('/:id', async (req, res) => {
   const body = req.body // would be obj with new values
 
   await Blog.updateOne({author: body.author}, {likes: body.likes}) //Update specified author with the new likes
