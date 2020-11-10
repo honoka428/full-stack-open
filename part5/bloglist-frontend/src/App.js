@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import {Blog, BlogForm} from './components/Blog'
-import {LoginForm} from './components/Login'
-import {LogoutForm} from './components/Logout'
+import { Blog } from './components/Blog'
+import { BlogForm } from './components/BlogFrom'
+import { LoginForm } from './components/Login'
+import { LogoutForm } from './components/Logout'
+import { Toggleable } from './components/Toggleable'
 import blogService from './services/blogs'
 import loginService from './services/login' 
 import './App.css'
@@ -13,11 +15,8 @@ const App = () => {
   const [password, setPassword] = useState('') 
   const [errorMessage, setErrorMessage] = useState('')
   const [errorType, setErrorType] = useState('greenError')
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
   const [token, setToken] = useState('')
-  const [blogFormVisible, setBlogFormVisible] = useState(false)
+  const [visible, setVisible] = useState(false)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -81,34 +80,6 @@ const App = () => {
     }
   }
 
-  const handleCreateBlog = async event => {
-    event.preventDefault()
-
-    const newBlog = {
-      "title": title,
-      "author": author,
-      "url": url
-    }
-
-    try {
-      await blogService.createOne(token, newBlog)
-      setTitle('')
-      setAuthor('')
-      setUrl('')
-      setErrorMessage('Successfully created blog post.')
-      setErrorType('greenError')
-      setBlogFormVisible(false)
-    }
-    catch(err) {
-      console.log(err)
-      setErrorMessage('There was a problem creating your blog post.')
-      setErrorType('redError')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
-    }
-  }
-  
   const loginForm = () =>
     <LoginForm 
       handleLogin={handleLogin}  
@@ -137,28 +108,41 @@ const App = () => {
       <p>{props.message}</p>
     </div>
 
-  const createBlog = () => 
-    <BlogForm 
-      handleCreateBlog={handleCreateBlog}
-      setTitle={setTitle}
-      setAuthor={setAuthor}
-      setUrl={setUrl}
-      title={title}
-      author={author}
-      url={url}
-      blogFormVisible={blogFormVisible}
-      setBlogFormVisible={setBlogFormVisible}
-    />    
+  const createBlog = async newBlog => {
+
+    try {
+      await blogService.createOne(token, newBlog)
+      setErrorMessage('Successfully created blog post.')
+      setErrorType('greenError')
+      setVisible(!visible)
+    }
+    catch(err) {
+      console.log(err)
+      setErrorMessage('There was a problem creating your blog post.')
+      setErrorType('redError')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
+
+  const blogForm = () => 
+    <Toggleable 
+      buttonLabel='new blog'
+      setVisible={setVisible}
+      visible={visible}
+    >
+      <BlogForm createBlog={createBlog}/>   
+    </Toggleable> 
 
   return (
     <div>
       <h1>Login</h1>
       <Notification message={errorMessage} />
 
-      {user === null && loginForm()}
-      {user !== null && logoutForm(user)}
+      {user === null ? loginForm() : logoutForm(user)}
+      {user !== null && blogForm()}
       {user !== null && blogList()}
-      {user !== null && createBlog()}
     </div>
   )
 }
