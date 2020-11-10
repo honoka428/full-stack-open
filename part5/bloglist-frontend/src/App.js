@@ -115,9 +115,12 @@ const App = () => {
   const blogList = () =>
     <div>
       <h2>blogs</h2>
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} likeBlog={likeBlog}/>
-      )}
+      {blogs
+        .sort((a, b) => a.likes - b.likes) // if a.likes - b.likes returns negative, sort a.likes first
+        .map(blog =>
+          <Blog key={blog.id} blog={blog} likeBlog={likeBlog}/>
+        )
+      }
   </div> 
 
   const Notification = props =>
