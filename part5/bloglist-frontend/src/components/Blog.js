@@ -54,7 +54,7 @@ const Blog = ({ blog, likeBlog, deleteBlog, user }) => {
     </div>
 
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className="blog">
       { detailsVisible === true
         ? allBlogDetails()
         : blogNameOnly()
