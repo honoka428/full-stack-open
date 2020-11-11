@@ -41,7 +41,7 @@ const Blog = ({ blog, likeBlog, deleteBlog, user }) => {
   const deleteButton = () => <button onClick={handleDelete}> delete </button>
 
   const allBlogDetails = () =>
-    <div>
+    <div className='detailsExpanded'>
       {blog.title} <button onClick={toggleDetailsView}> hide </button> <br/>
       url: {blog.url} <br/>
       author: {blog.author} <br/>
