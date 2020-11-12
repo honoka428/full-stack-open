@@ -7,7 +7,13 @@ describe('Blog app', function() {
             "name": "Millie Jones",
             "password": "passwordmillie"
         })
-   
+
+        cy.request('POST', 'http://localhost:3001/api/users', {
+            "username": "alex",
+            "name": "Alex Smith",
+            "password": "passwordalex"
+        })
+
         cy.visit('http://localhost:3000')
     })
 
@@ -47,14 +53,14 @@ describe('Blog app', function() {
         })
     })
 
-    describe.only('When logged in and blog exists', function() {
+    describe.only('When logged in and own blog exists', function() {
         beforeEach(function() {
             cy.login({ username: 'millie', password: 'passwordmillie' })
             cy.contains('new blog').click()
             cy.get('#title').type('Sample Title')
             cy.get('#author').type('Mr. Test')
             cy.get('#url').type('www.test.com')
-            cy.contains('create').click()            
+            cy.contains('create').click()
         })
     
         it('A blog can be liked', function() {
@@ -62,5 +68,29 @@ describe('Blog app', function() {
             cy.contains('like').click()
             cy.contains('likes: 1')
         })
-    })    
+
+        it('A blog can be deleted', function() {
+            cy.contains('view').click()
+            cy.contains('delete').click()
+            cy.contains('Successfully deleted blog.').click()
+        })        
+    })
+
+    describe.only('When logged in and own blog doesnt exist', function() {
+        beforeEach(function() {
+            cy.login({ username: 'millie', password: 'passwordmillie' })
+            cy.contains('new blog').click()
+            cy.get('#title').type('Sample Title')
+            cy.get('#author').type('Mr. Test')
+            cy.get('#url').type('www.test.com')
+            cy.contains('create').click()
+        })
+
+        it('A blog by another cannot be deleted', function() {
+            cy.contains('logout').click()
+            cy.login({ username: 'alex', password: 'passwordalex' })
+            cy.contains('view').click()
+            cy.should('not.contain', 'delete')
+        })        
+    })        
 })
