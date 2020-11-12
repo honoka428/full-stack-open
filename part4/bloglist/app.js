@@ -30,6 +30,12 @@ app.use(middleware.tokenExtractor) // make token field accessible from request.t
 app.use('/api/blogs', blogsRouter) // use /api/blogs are root route for all requests in blogsRouter
 app.use('/api/users', usersRouter) // use /api/users are root route for all requests in blogsRouter
 app.use('/api/login', loginRouter) // use /api/login are root route for all requests in blogsRouter
+
+if (process.env.NODE_ENV === 'test') {
+    const testingRouter = require('./controllers/testing')
+    app.use('/api/testing', testingRouter)
+  }
+  
 app.use(middleware.requestLogger) // custom middleware for error handling and logging
 app.use(middleware.errorHandler)
 app.use(middleware.unknownEndpoint)

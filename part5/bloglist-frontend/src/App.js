@@ -22,7 +22,7 @@ const App = () => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
     )
-  })
+  }, [])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
@@ -183,6 +183,7 @@ const App = () => {
       <Notification message={errorMessage} />
 
       {user === null ? loginForm() : logoutForm(user)}
+      {/* fix this because causing infitinite GET reqs */}
       {user !== null && blogForm()}
       {user !== null && blogList()}
     </div>

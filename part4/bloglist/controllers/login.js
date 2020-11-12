@@ -14,7 +14,7 @@ loginRouter.post('/', async (request, response) => {
     ? false
     : await bcrypt.compare(body.password, user.passwordHash)
 
-    console.log(user)
+    console.log('user' + user)
   
     if (!(user && passwordCorrect)) {
     return response.status(401).json({
