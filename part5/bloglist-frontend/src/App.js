@@ -56,7 +56,7 @@ const App = () => {
 
       setTimeout(() => {
         setErrorMessage(null)
-      }, 5000)
+      }, 3000)
 
     } catch (err) {
       next(err)
@@ -80,7 +80,7 @@ const App = () => {
       setErrorMessage('There was a problem logging you out. Please try again later.')
       setTimeout(() => {
         setErrorMessage(null)
-      }, 5000)
+      }, 3000)
     }
   }
 
@@ -113,7 +113,7 @@ const App = () => {
     }
     setTimeout(() => {
       setErrorMessage(null)
-    }, 5000)
+    }, 3000)
   }
 
   const deleteBlog = async idToDelete => {
@@ -129,11 +129,11 @@ const App = () => {
     }
     setTimeout(() => {
       setErrorMessage(null)
-    }, 5000)
+    }, 3000)
   }
 
   const blogList = () =>
-    <div>
+    <div className="blogList">
       <h2>blogs</h2>
       {blogs
         .sort((a, b) => a.likes - b.likes) // if a.likes - b.likes returns negative, sort a.likes first
@@ -170,7 +170,7 @@ const App = () => {
 
     setTimeout(() => {
       setErrorMessage(null)
-    }, 5000)
+    }, 2000)
   }
 
   const blogForm = () =>
@@ -188,7 +188,6 @@ const App = () => {
       <Notification message={errorMessage} />
 
       {user === null ? loginForm() : logoutForm(user)}
-      {/* fix this because causing infitinite GET reqs */}
       {user !== null && blogForm()}
       {user !== null && blogList()}
     </div>

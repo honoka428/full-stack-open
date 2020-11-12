@@ -91,6 +91,25 @@ describe('Blog app', function() {
             cy.login({ username: 'alex', password: 'passwordalex' })
             cy.contains('view').click()
             cy.should('not.contain', 'delete')
-        })        
-    })        
+        })
+    })
+
+    describe.only('When logged in and there are multiple blogs', function() {
+        beforeEach(function() {
+            cy.login({ username: 'millie', password: 'passwordmillie' })
+            cy.createBlog({title:'MostLikes', author:'Mr. Test', url:'www.test.com'})
+            cy.contains('view').click()
+            cy.contains('like').click()
+            cy.contains('like').click()
+            
+            cy.wait(5000)
+            cy.createBlog({title:'LessLikes', author:'Mrs. Test', url:'www.dfsd.com'})
+        })
+
+        it('Blogs are ordered by number of likes', function() {
+            cy.get('.blogList').first().then(() => {
+                cy.contains('LessLikes')
+            })
+        })
+    })            
 })

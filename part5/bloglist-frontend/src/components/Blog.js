@@ -9,7 +9,7 @@ const Blog = ({ blog, likeBlog, deleteBlog, user }) => {
   }
 
   const blogNameOnly = () =>
-    <div>
+    <div className={blog.title}>
       {blog.title} <button onClick={toggleDetailsView}> view </button>
     </div>
 
