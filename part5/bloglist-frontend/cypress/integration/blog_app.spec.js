@@ -46,4 +46,21 @@ describe('Blog app', function() {
             cy.contains('Sample Title')
         })
     })
+
+    describe.only('When logged in and blog exists', function() {
+        beforeEach(function() {
+            cy.login({ username: 'millie', password: 'passwordmillie' })
+            cy.contains('new blog').click()
+            cy.get('#title').type('Sample Title')
+            cy.get('#author').type('Mr. Test')
+            cy.get('#url').type('www.test.com')
+            cy.contains('create').click()            
+        })
+    
+        it('A blog can be liked', function() {
+            cy.contains('view').click()
+            cy.contains('like').click()
+            cy.contains('likes: 1')
+        })
+    })    
 })
