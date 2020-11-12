@@ -25,7 +25,7 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
+    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
@@ -33,7 +33,7 @@ const App = () => {
     }
   }, [])
 
-  const handleLogin = async (event) => {
+  const handleLogin = async (event, next) => {
     event.preventDefault()
 
     try {
@@ -41,21 +41,25 @@ const App = () => {
         username, password
       })
 
-      window.localStorage.setItem(
-        'loggedNoteappUser', JSON.stringify(user)
-      )
-      setUser(user)
-      setErrorMessage('Successfully logged in.')
-      setErrorType('greenError')
+      if ( user === 'invalid username or password') {
+        setUser(null)
+        setErrorMessage('invalid username or password')
+        setErrorType('redError')
+      }
 
-    } catch (err) {
-      console.log(err)
-      setErrorMessage('Wrong credentials')
-      setErrorType('redError')
+      else {
+        window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
+        setUser(user)
+        setErrorMessage('Successfully logged in.')
+        setErrorType('greenError')
+      }
 
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
+
+    } catch (err) {
+      next(err)
     }
   }
 
