@@ -8,6 +8,9 @@ const getAll = () => {
 
 const createOne = async(authToken, blog) => {
   console.log('inside createONe')
+  console.log(authToken)
+  console.log(blog)
+
   const request = await axios.post(baseUrl, blog, {
     headers: {
       'Authorization': authToken

@@ -22,7 +22,7 @@ const App = () => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
     )
-  }, [])
+  }, [errorMessage])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -110,10 +110,10 @@ const App = () => {
       console.log(err)
       setErrorMessage('There was a problem liking this blog post.')
       setErrorType('redError')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
     }
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000)
   }
 
   const deleteBlog = async idToDelete => {
@@ -166,10 +166,11 @@ const App = () => {
       console.log(err)
       setErrorMessage('There was a problem creating your blog post.')
       setErrorType('redError')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
     }
+
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000)
   }
 
   const blogForm = () =>
