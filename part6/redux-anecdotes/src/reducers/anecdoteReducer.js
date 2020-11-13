@@ -32,9 +32,13 @@ const anecdoteReducer = (state = initialState, action) => {
         votes: anecdoteToChange.votes + 1
       }
 
-      const newState = state.map(a => a.id === id ? changedAnecdote : a)
+      return state.map(a => a.id === id ? changedAnecdote : a)
 
-      return newState
+    case 'CREATE_ANECDOTE':
+      const content = action.data.content
+
+      return [ ...state, asObject(content) ]
+
     default: // if none of the above matches, code comes here
     return state
   }
@@ -47,4 +51,10 @@ export const addVote = (id) => {
   }
 }
 
+export const createAnecdote = (content) => {
+  return {
+    type: 'CREATE_ANECDOTE',
+    data: { content }
+  }
+}
 export default anecdoteReducer
