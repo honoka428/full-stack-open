@@ -1,5 +1,5 @@
 const notificationsAtStart = [
-    'this is a test notification'
+    'default notification'
   ]
   
 const getId = () => (100000 * Math.random()).toFixed(0)
@@ -14,14 +14,22 @@ const asObject = (notification) => {
 const initialState = notificationsAtStart.map(asObject)
   
 const notificationReducer = (state = initialState, action) => {
-    return state
+  switch (action.type) {
+    case 'UPDATE_NOTIFICATION':
+      const newNotification = [`You added a vote to '${action.data.content}'`]
+
+      return newNotification.map(asObject)
+
+    default:
+      return state
+  }
 }
 
-// export const addVote = (id) => {
-//     return {
-//         type: 'ADD_VOTE',
-//         data: { id }
-//     }
-// }
+export const updateNotification = (content) => {
+    return {
+        type: 'UPDATE_NOTIFICATION',
+        data: { content }
+    }
+}
 
 export default notificationReducer
