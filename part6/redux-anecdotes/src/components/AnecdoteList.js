@@ -5,35 +5,41 @@ import { turnOffNotification, turnOnNotification } from '../reducers/notificatio
 
 
 const AnecdoteList = () => {
-    const anecdotes = useSelector(state => state.anecdote)
-    const dispatch = useDispatch()
+  const filter = useSelector(state => state.filter)
 
-    const vote = (id, content) => {
-        console.log('vote', id)
-        dispatch(addVote(id))
-        dispatch(turnOnNotification(content))
-        setTimeout(() => {
-          dispatch(turnOffNotification())
-        }, 5000)
-    }
-    
-    return (
-        <div>
-        {anecdotes
-            .sort((a, b) => a.votes - b.votes) // if a.votes - b.votes returns negative, sort a.votes first
-            .map(anecdote =>
-              <div key={anecdote.id}>
-                <div>
-                  {anecdote.content}
-                </div>
-                <div>
-                  has {anecdote.votes}
-                  <button onClick={() => vote(anecdote.id, anecdote.content)}>vote</button>
-                </div>
+  const anecdotes = useSelector(state => {
+      if (filter === 'ALL') { return state.anecdote }
+      return state.anecdote.filter(a => a.content.toLowerCase().includes(filter.toLowerCase()))
+    })
+  
+  const dispatch = useDispatch()
+
+  const vote = (id, content) => {
+      console.log('vote', id)
+      dispatch(addVote(id))
+      dispatch(turnOnNotification(content))
+      setTimeout(() => {
+        dispatch(turnOffNotification())
+      }, 5000)
+  }
+  
+  return (
+      <div>
+      {anecdotes
+          .sort((a, b) => a.votes - b.votes) // if a.votes - b.votes returns negative, sort a.votes first
+          .map(anecdote =>
+            <div key={anecdote.id}>
+              <div>
+                {anecdote.content}
               </div>
-        )}
-        </div>
-    )
+              <div>
+                has {anecdote.votes}
+                <button onClick={() => vote(anecdote.id, anecdote.content)}>vote</button>
+              </div>
+            </div>
+      )}
+      </div>
+  )
 }
 
 export default AnecdoteList
