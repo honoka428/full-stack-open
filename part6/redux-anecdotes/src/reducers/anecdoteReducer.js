@@ -1,4 +1,3 @@
-import AnecdoteForm from '../components/AnecdoteForm'
 import anecdoteService from '../services/anecdotes'
 
 const anecdoteReducer = (state = [], action) => {

@@ -8,9 +8,8 @@ const initialState = [{
 const notificationReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'TURN_ON_NOTIFICATION':
-      const newNotification = `You added a vote to '${action.data.content}'`
       state = [{
-        content: newNotification,
+        content: action.data,
         id: getId()
       }]
       return state
@@ -23,17 +22,19 @@ const notificationReducer = (state = initialState, action) => {
   }
 }
 
-export const turnOnNotification = (content) => {
-    return {
+export const setNotification = (content, time) => {
+    return async(dispatch) => {
+      dispatch({
         type: 'TURN_ON_NOTIFICATION',
-        data: { content }
+        data: content
+      })
+      setTimeout(() => {
+        dispatch({
+          type: 'TURN_OFF_NOTIFICATION',
+          data: ''
+        })
+      }, time)
     }
-}
-
-export const turnOffNotification = () => {
-  return {
-      type: 'TURN_OFF_NOTIFICATION'
-  }
 }
 
 export default notificationReducer
