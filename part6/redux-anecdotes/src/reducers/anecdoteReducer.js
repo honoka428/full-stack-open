@@ -1,3 +1,4 @@
+import AnecdoteForm from '../components/AnecdoteForm'
 import anecdoteService from '../services/anecdotes'
 
 const anecdoteReducer = (state = [], action) => {
@@ -26,14 +27,6 @@ const anecdoteReducer = (state = [], action) => {
   }
 }
 
-export const addVote = (id) => {
-  return {
-    type: 'ADD_VOTE',
-    data: { id }
-  }
-}
-
-
   // *** REACT Thunk *** middleware
   // makes async calls to backend possible within an action creator
 
@@ -57,6 +50,22 @@ export const createAnecdote = (content) => {
     const data = await anecdoteService.createOne(content)
     dispatch({
       type: 'CREATE_ANECDOTE',
+      data
+    })
+  }
+}
+
+export const addVote = (id, content, votes) => {
+  return async(dispatch) => {
+    const updatedAnecdote = {
+      id: id,
+      content: content,
+      votes: votes + 1
+    }
+    const data = await anecdoteService.updateOne(updatedAnecdote)
+    
+    dispatch({
+      type: 'ADD_VOTE',
       data
     })
   }
