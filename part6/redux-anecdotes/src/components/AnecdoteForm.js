@@ -1,7 +1,6 @@
 import React from 'react'
-import { connect, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { createAnecdote } from '../reducers/anecdoteReducer'
-import anecdoteService from '../services/anecdotes'
 
 const AnecdoteForm = () =>  {
     const dispatch = useDispatch()
@@ -9,12 +8,7 @@ const AnecdoteForm = () =>  {
     const addAnecdote = async(event) => {
         event.preventDefault()
         const content = event.target.anecdote.value
-        
-        // Add new anecdote to db (obj created in backend)
-        const newAnecdote = await anecdoteService.createOne(content)
-
-        // Update anecdotes state in frontend with object returned from backend
-        dispatch(createAnecdote(newAnecdote))
+        dispatch(createAnecdote(content))
     }
 
     return(

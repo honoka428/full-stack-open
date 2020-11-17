@@ -3,7 +3,6 @@ import AnecdoteForm from './components/AnecdoteForm'
 import AnecdoteList from './components/AnecdoteList'
 import Notification from './components/Notification'
 import Filter from './components/Filter'
-import anecdoteService from './services/anecdotes'
 import { initializeAnecdotes } from './reducers/anecdoteReducer'
 import { useDispatch } from 'react-redux'
 
@@ -11,12 +10,9 @@ const App = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    // Initialize anecdotes list with those in db.json
-    anecdoteService
-      .getAll()
-      .then(anecdotes => {
-          dispatch(initializeAnecdotes(anecdotes))
-      })
+    // dispatch method (communication w/ state) is sent to initializeAnecdotes()
+    // as a parameter so it can be used asynchronously
+    dispatch(initializeAnecdotes())
   }, [dispatch])
 
   return (

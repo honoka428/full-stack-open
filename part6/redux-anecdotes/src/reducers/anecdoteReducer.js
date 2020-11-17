@@ -1,3 +1,5 @@
+import anecdoteService from '../services/anecdotes'
+
 const anecdoteReducer = (state = [], action) => {
   console.log('state now: ', state)
   console.log('action', action)
@@ -31,17 +33,32 @@ export const addVote = (id) => {
   }
 }
 
-export const createAnecdote = (data) => {
-  return {
-    type: 'CREATE_ANECDOTE',
-    data
+
+  // *** REACT Thunk *** middleware
+  // makes async calls to backend possible within an action creator
+
+export const initializeAnecdotes = () => {
+  // Dispatch passed as param
+  // API call to get all anecdotes then use the result to
+    // dispatch to state
+  return async(dispatch) => {
+    const anecdotes = await anecdoteService.getAll()
+    dispatch({
+      type: 'INIT_ANECDOTES',
+      data: anecdotes,
+    })
   }
 }
 
-export const initializeAnecdotes = (anecdotes) => {
-  return {
-    type: 'INIT_ANECDOTES',
-    data: anecdotes,
+// Update anecdotes state in frontend with object returned from backend
+export const createAnecdote = (content) => {
+  return async(dispatch) => {
+    // Add new anecdote to db (obj created in backend)
+    const data = await anecdoteService.createOne(content)
+    dispatch({
+      type: 'CREATE_ANECDOTE',
+      data
+    })
   }
 }
 
