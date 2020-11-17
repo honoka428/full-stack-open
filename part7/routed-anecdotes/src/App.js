@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { BrowserRouter as Router, Switch, Route, Link, useParams } from "react-router-dom"
+import { BrowserRouter as Router, Switch, Route, Link, useParams, Redirect } from "react-router-dom"
 
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
@@ -55,18 +55,22 @@ const App = () => {
         </div>
 
         <Switch>
-          <Route exact path="/">
-            <AnecdoteList anecdotes={anecdotes}/>
-          </Route>
-          <Route exact path="/:id">
-            <Anecdote anecdotes={anecdotes}/>
-          </Route>
           <Route path="/createNew">
-            <CreateNew addNew={addNew}/>
+            {
+              notification !== '' 
+              ? <Redirect to="/" />
+              : <CreateNew addNew={addNew} setNotification={setNotification}/>
+            }
           </Route>
           <Route path="/about">
             <About />
             <div>about</div>
+          </Route>
+          <Route path="/">
+            <AnecdoteList anecdotes={anecdotes} notification={notification} setNotification={setNotification}/>
+          </Route>
+          <Route path="/:id">
+            <Anecdote anecdotes={anecdotes}/>
           </Route>
         </Switch>
       </Router>
@@ -75,18 +79,26 @@ const App = () => {
   )
 }
 
-const AnecdoteList = ({ anecdotes }) => (
-  <div>
-    <h2>Anecdotes</h2>
-    <ul>
-      {anecdotes.map(anecdote => 
-        <li key={anecdote.id} >
-          <Link to={`/${anecdote.id}`}>{anecdote.content}</Link>
-        </li>
-      )}
-    </ul>
-  </div>
-)
+const AnecdoteList = ({ anecdotes, notification, setNotification }) => {
+
+  setTimeout(() => {
+    setNotification('')}, 5000
+  )
+
+  return (
+    <div>
+      <h2>Anecdotes</h2>
+      <div style={{fontWeight: 'bold', color: 'turquoise'}}> {notification} </div>
+      <ul>
+        {anecdotes.map(anecdote => 
+          <li key={anecdote.id} >
+            <Link to={`/${anecdote.id}`}>{anecdote.content}</Link>
+          </li>
+        )}
+      </ul>
+    </div>
+  )
+}
 
 const Anecdote = ({ anecdotes }) => {
   const id = useParams().id
@@ -141,6 +153,7 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
+    props.setNotification(`Added new anecdote: ${content}`)
   }
 
   return (
