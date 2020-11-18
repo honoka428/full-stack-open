@@ -1,8 +1,13 @@
 import React, { useState } from 'react'
+import { toggleOnNotification, toggleOffNotification } from '../reducers/notificationReducer'
+import { useDispatch } from 'react-redux'
+import blogService from '../services/blogs'
 
-const Blog = ({ blog, likeBlog, deleteBlog, user }) => {
+const Blog = ({ blog, user }) => {
 
   const [ detailsVisible, setDetailsVisible] = useState(false)
+
+  const dispatch = useDispatch()
 
   const toggleDetailsView = () => {
     setDetailsVisible(!detailsVisible)
@@ -21,20 +26,56 @@ const Blog = ({ blog, likeBlog, deleteBlog, user }) => {
     marginBottom: 5
   }
 
-  const handleLike = () => {
-    likeBlog({
+  const handleLike = async() => {
+    const updatedBlog = {
       'user': blog.user,
       'title': blog.title,
       'author': blog.author,
       'url': blog.url,
       'likes': blog.likes + 1
-    })
+    }
+
+    try {
+      await blogService.updateOne(updatedBlog)
+      
+      dispatch(toggleOnNotification({
+        type: 'greenError',
+        message: `Successfully liked ${updatedBlog.title}`
+      }))
+    }
+    catch(err) {
+      console.log(err)
+      dispatch(toggleOnNotification({
+        type: 'redError',
+        message: 'There was a problem liking this blog post.'
+      }))
+    }
+    setTimeout(() => {
+      dispatch(toggleOffNotification())
+    }, 3000)
   }
 
-  const handleDelete = () => {
+  const handleDelete = async() => {
     if (window.confirm(`Are you sure you want to delete ${blog.title}`)) {
       const idToDelete = blog.id
-      deleteBlog(idToDelete)
+
+      try {
+        await blogService.deleteOne(idToDelete)
+        dispatch(toggleOnNotification({
+          type: 'greenError',
+          message: 'Successfully deleted blog'
+        }))
+      }
+      catch(err){
+        console.log(err)
+        dispatch(toggleOnNotification({
+          type: 'redError',
+          message: 'There was a problem deleting your blog post.'
+        }))
+      }
+      setTimeout(() => {
+        dispatch(toggleOffNotification())
+      }, 3000)
     }
   }
 

@@ -23,31 +23,18 @@ export const initializeBlogs = (blogs) => {
     }
 }
 
-export const createBlog = (newBlog, token, setErrorMessage, setErrorType, setVisible, visible) => {
-    try {
-        blogService
-            .createOne(token, newBlog)
-            .then(response => {
-                console.log(response)
-                return {
-                    type: 'NEW_BLOG',
-                    data: response
-                }
-            })
-        setErrorMessage('Successfully created blog post.')
-        setErrorType('greenError')
-        setVisible(!visible)
-    }
-    catch(err) {
-        console.log(err)
-        setErrorMessage('There was a problem creating your blog post.')
-        setErrorType('redError')
-    }
-
-    setTimeout(() => {
-      setErrorMessage(null)
-    }, 2000)
-  }
+export const createBlog = (newBlog, token, setVisible, visible) => {
+    blogService
+        .createOne(token, newBlog)
+        .then(response => {
+            console.log(response)
+            return {
+                type: 'NEW_BLOG',
+                data: response
+            }
+        })
+    setVisible(!visible)
+}
 
 
 export { blogReducer }

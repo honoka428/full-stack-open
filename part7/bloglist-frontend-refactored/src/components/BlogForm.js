@@ -1,22 +1,48 @@
 import React, { useState } from 'react'
 import { createBlog } from '../reducers/blogReducer'
+import { toggleOnNotification, toggleOffNotification } from '../reducers/notificationReducer'
+import { useDispatch, useSelector } from 'react-redux'
 
-const BlogForm = ({ token, setErrorMessage, setErrorType, setVisible, visible }) => {
+
+const BlogForm = ({ setVisible, visible }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
+  const token = useSelector(state => state.token)
+
+  const dispatch = useDispatch()
+
   const addBlog = event => {
     event.preventDefault()
 
-    createBlog({
-      'title': title,
-      'author': author,
-      'url': url
-    }, token, setErrorMessage, setErrorType, setVisible, visible)
-    setTitle('')
-    setAuthor('')
-    setUrl('')
+    try{
+      createBlog({
+        'title': title,
+        'author': author,
+        'url': url
+      }, token, setVisible, visible)
+
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+  
+      dispatch(toggleOnNotification({
+        type: 'greenError',
+        message: 'Successfully created blog post.'
+      }))
+    }
+    catch(err) {
+      dispatch(toggleOnNotification({
+        type: 'redError',
+        message: 'TThere was a problem creating your blog post.'
+      }))
+      console.log(err)
+    }
+
+    setTimeout(() => {
+      dispatch(toggleOffNotification())
+    }, 2000)
   }
 
   return (
