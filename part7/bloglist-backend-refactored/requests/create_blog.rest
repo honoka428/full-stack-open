@@ -1,0 +1,11 @@
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5vcmFqb25lcyIsImlkIjoiNWZhNWFiZjRiZGNiNTQwMDU1ZWUxN2I5IiwiaWF0IjoxNjA0NjkzMDAyfQ.GVgn6IJB6q6MFQz4cM6uqbhg1LhFAZkLjcUiCK23KHc
+# eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG5kb2UiLCJpZCI6IjVmYTVhMzQ2YWQwMzRiZmU1NGJhMjQ1MSIsImlhdCI6MTYwNDY5Mjc4Nn0.BYY4eQ0N9R-VzX6aiIJfoomx5ncH4LjeCiSdd0JrUA8
+
+{
+    "title": "This is my second Blog",
+    "author": "Samantha Williams",
+    "url": "fsdfs.com",
+    "likes": 10
+}
