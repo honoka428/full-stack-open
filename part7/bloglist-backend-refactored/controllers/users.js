@@ -9,8 +9,8 @@ const bcrypt = require('bcrypt')
 usersRouter.get('/', (req, res) => {
     User
     .find({})
-    .then(blogs => {
-      res.json(blogs)
+    .then(users => {
+      res.json(users)
     })
 })
   

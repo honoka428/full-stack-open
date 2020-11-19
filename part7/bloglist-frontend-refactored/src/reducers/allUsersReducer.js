@@ -13,10 +13,10 @@ const allUsersReducer = (state = [], action) => {
 
 export const getAllUsers = () => {
     return async dispatch => {
-        const users = await userService.getAll()
+        const allUsers = await userService.getAll()
         const blogs = await blogsService.getAll()
 
-        users.forEach(u => {
+        allUsers.forEach(u => {
             u.blogCount = 0 // init blogCount key for each user as 0
             blogs.forEach(b => { // loop through all blogs. if blog is by user, add to blog count.
                 u.blogCount = 
@@ -26,10 +26,9 @@ export const getAllUsers = () => {
             })
         })
 
-        console.log(users)
         dispatch({
           type: 'GET_ALL',
-          data: users,
+          data: allUsers,
         })
     }
 }

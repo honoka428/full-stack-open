@@ -1,20 +1,34 @@
-const initialState = null
-
-const userReducer = (state = initialState, action) => {
+const userReducer = (state = null, action) => {
     switch(action.type){
-        case 'UPDATE_USER':
+        case 'SET_USER':
             return action.data
-        case 'GET_USER':
-            return state
+        case 'REMOVE_USER':
+            return action.data
         default:
             return state
     }
 }
 
-export const updateUser = (user) => {
-    return {
-        type: 'UPDATE_USER',
-        data: user //object
+export const setUser = () => {
+    return async dispatch => {
+        const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
+        if (loggedUserJSON) {
+            const loggedUser = JSON.parse(loggedUserJSON)
+
+            dispatch({
+                type: 'SET_USER',
+                data: loggedUser //object
+            })
+        console.log('dispatched user', loggedUser)
+    }}
+}
+
+export const removeUser = () => {
+    return async dispatch => {
+        dispatch({
+            type: 'REMOVE_USER',
+            data: null
+        })
     }
 }
 

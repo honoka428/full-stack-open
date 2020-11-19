@@ -1,26 +1,27 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { updateUser } from '../reducers/userReducer'
+import { removeUser } from '../reducers/userReducer'
 import { toggleOnNotification, toggleOffNotification } from '../reducers/notificationReducer'
 import { initializeLoginForm } from '../reducers/loginReducer'
-import { resetToken } from '../reducers/tokenReducer'
+import {   useHistory } from 'react-router-dom'
 
 const LogoutForm = () => {
   const user = useSelector(state => state.user)
   const dispatch = useDispatch()
+  const history = useHistory()
 
   const handleLogout = event => {
     event.preventDefault()
-
+    
     try {
-      dispatch(updateUser(null))
-      dispatch(initializeLoginForm())
-      dispatch(resetToken())
+      dispatch(removeUser())
+      dispatch(initializeLoginForm())  // FIX HERE - logout doenst claer form
       window.localStorage.clear()
       dispatch(toggleOnNotification({
         type: 'greenError',
         message: 'Successfully logged out.'
       }))
+      history.push('/')
     }
     catch(err){
       console.log(err)
@@ -28,10 +29,10 @@ const LogoutForm = () => {
         type: 'redError',
         message: 'There was a problem logging you out. Please try again later.'
       }))
-      setTimeout(() => {
-        dispatch(toggleOffNotification())
-      }, 3000)
     }
+    setTimeout(() => {
+      dispatch(toggleOffNotification())
+    }, 3000)
   }
 
   return(
@@ -41,6 +42,5 @@ const LogoutForm = () => {
     </form>
  ) 
 }
-
 
 export { LogoutForm }

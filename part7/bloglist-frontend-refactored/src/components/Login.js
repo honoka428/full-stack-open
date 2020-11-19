@@ -2,7 +2,7 @@ import React from 'react'
 import loginService from '../services/login'
 import { toggleOnNotification, toggleOffNotification } from '../reducers/notificationReducer'
 import { useDispatch, useSelector } from 'react-redux'
-import { updateUser } from '../reducers/userReducer'
+import { setUser, removeUser } from '../reducers/userReducer'
 import { updateUsername, updatePassword } from '../reducers/loginReducer'
 
 const LoginForm = () => {
@@ -25,12 +25,11 @@ const LoginForm = () => {
           type: 'redError',
           message: 'invalid username or password'
         }))
-        dispatch(updateUser(null))
+        dispatch(removeUser())
       }
       else {
         window.localStorage.setItem('loggedBlogappUser', JSON.stringify(response))
-        console.log(response)
-        dispatch(updateUser(response))
+        dispatch(setUser())
         dispatch(toggleOnNotification({
           type: 'greenError',
           message: 'Successfully logged in.'

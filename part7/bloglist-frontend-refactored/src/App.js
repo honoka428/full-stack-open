@@ -9,9 +9,9 @@ import { Notification } from './components/Notification'
 import './App.css'
 import { initializeBlogs } from './reducers/blogReducer'
 import { useDispatch, useSelector } from 'react-redux'
-import { updateUser } from './reducers/userReducer'
-import { updateToken } from './reducers/tokenReducer'
+import { setUser } from './reducers/userReducer'
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"
+import { UserBlogs } from './components/UserBlogs'
 import { getAllUsers } from './reducers/allUsersReducer'
 
 const App = () => {
@@ -23,18 +23,10 @@ const App = () => {
   const notification = useSelector(state => state.notification)
 
   useEffect(() => {
+      dispatch(setUser())
       dispatch(initializeBlogs())
       dispatch(getAllUsers())
   }, [notification, dispatch])
-
-  useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      dispatch(updateUser(user))
-      dispatch(updateToken(`bearer ${user.token}`))
-    }
-  }, [dispatch])
 
   const loginForm = () =>
     <LoginForm />
@@ -56,8 +48,9 @@ const App = () => {
         visible={visible}
       />
     </Toggleable>
+  console.log(user)
 
-  const userList = () => 
+  const userList = () =>
     <UserList />
 
   return (
@@ -71,15 +64,21 @@ const App = () => {
       <div>
         <Link to='/'/>
         <Link to='/users'/>
+        <Link to='/users/:id'/>
       </div>
       <Switch>
         <Route exact path='/'>
           {user !== null && blogForm()}
           {user !== null && blogList()}
         </Route>
-        <Route path='/user'>
-          { user !== null && userList()}
+        <Route exact path='/users'>
+          {user !== null && userList()}
         </Route>
+        <Route 
+          exact path='/users/:id'
+          render={({ match }) => 
+            user !== null && <UserBlogs match={match}/>
+          }/>
       </Switch>
     </Router>
   )

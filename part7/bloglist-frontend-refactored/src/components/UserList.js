@@ -1,8 +1,10 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 const UserList = () => {
-    const users = useSelector( state => state.allUsers)
+
+    const allUsers = useSelector( state => state.allUsers)
 
     return (
         <div>
@@ -16,9 +18,9 @@ const UserList = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    { users.map(u => 
+                    { allUsers.map(u => 
                         <tr key={u.id}>
-                            <td>{u.name}</td>
+                            <td><Link to={`/users/${u.id}`}>{u.name}</Link></td>
                             <td style={{textAlign: 'center'}}>{u.blogCount}</td>
                         </tr>
                     )}

@@ -9,7 +9,9 @@ const BlogForm = ({ setVisible, visible }) => {
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
-  const token = useSelector(state => state.token)
+  const token = useSelector(state => {
+    return `bearer ${state.user.token}`
+  })
 
   const dispatch = useDispatch()
 

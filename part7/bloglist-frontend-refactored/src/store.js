@@ -6,7 +6,6 @@ import { blogReducer } from './reducers/blogReducer'
 import { userReducer } from './reducers/userReducer'
 import { notificationReducer } from './reducers/notificationReducer'
 import { loginReducer } from './reducers/loginReducer'
-import { tokenReducer } from './reducers/tokenReducer'
 import { allUsersReducer } from './reducers/allUsersReducer'
 
 const reducer = combineReducers({
@@ -14,7 +13,6 @@ const reducer = combineReducers({
     notification: notificationReducer,
     user: userReducer,
     login: loginReducer,
-    token: tokenReducer,
     allUsers: allUsersReducer
 })
   
