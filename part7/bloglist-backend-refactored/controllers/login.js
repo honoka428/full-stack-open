@@ -4,7 +4,7 @@ const loginRouter = require('express').Router()
 const User = require('../models/user')
 
 // Root route is equiv. to /api/blogs because of 
-// app.use('/api/blogs/', blogsRouter) declaration in app.js
+// app.use('/api/login/', loginRouter) declaration in app.js
 loginRouter.post('/', async (request, response) => {
   const body = request.body
 

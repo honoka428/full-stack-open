@@ -1,31 +1,30 @@
 import React, { useState, useEffect } from 'react'
-import { Blog } from './components/Blog'
 import { BlogForm } from './components/BlogForm'
+import { BlogList } from './components/BlogList'
+import { UserList } from './components/UserList'
 import { LoginForm } from './components/Login'
 import { LogoutForm } from './components/Logout'
 import { Toggleable } from './components/Toggleable'
 import { Notification } from './components/Notification'
-import blogService from './services/blogs'
 import './App.css'
 import { initializeBlogs } from './reducers/blogReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateUser } from './reducers/userReducer'
 import { updateToken } from './reducers/tokenReducer'
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"
+import { getAllUsers } from './reducers/allUsersReducer'
 
 const App = () => {
   const [visible, setVisible] = useState(false)
 
   const dispatch = useDispatch()
 
-  const blogs = useSelector(state => state.blog )
   const user = useSelector(state => state.user)
   const notification = useSelector(state => state.notification)
 
   useEffect(() => {
-    blogService.getAll().then(blogs => {
-      dispatch(initializeBlogs(blogs)
-      )
-    })
+      dispatch(initializeBlogs())
+      dispatch(getAllUsers())
   }, [notification, dispatch])
 
   useEffect(() => {
@@ -41,23 +40,10 @@ const App = () => {
     <LoginForm />
 
   const logoutForm = () =>
-    <LogoutForm
-    />
+    <LogoutForm />
 
   const blogList = () =>
-    <div className="blogList">
-      <h2>blogs</h2>
-      {blogs
-        .sort((a, b) => a.likes - b.likes) // if a.likes - b.likes returns negative, sort a.likes first
-        .map(blog =>
-          <Blog
-            key={blog.id}
-            blog={blog}
-            user={user}
-          />
-        )
-      }
-    </div>
+    <BlogList/>
 
   const blogForm = () =>
     <Toggleable
@@ -71,15 +57,31 @@ const App = () => {
       />
     </Toggleable>
 
-  return (
-    <div>
-      <h1>Blog List</h1>
-      <Notification />
+  const userList = () => 
+    <UserList />
 
-      {user === null ? loginForm() : logoutForm(user)}
-      {user !== null && blogForm()}
-      {user !== null && blogList()}
-    </div>
+  return (
+    <Router>
+      <div>
+        <h1>Blog List</h1>
+        <Notification />
+        {user === null ? loginForm() : logoutForm(user)}
+        {/* <Navigation /> */}
+      </div>
+      <div>
+        <Link to='/'/>
+        <Link to='/users'/>
+      </div>
+      <Switch>
+        <Route exact path='/'>
+          {user !== null && blogForm()}
+          {user !== null && blogList()}
+        </Route>
+        <Route path='/user'>
+          { user !== null && userList()}
+        </Route>
+      </Switch>
+    </Router>
   )
 }
 

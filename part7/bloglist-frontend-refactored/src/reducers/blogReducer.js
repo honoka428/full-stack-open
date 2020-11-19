@@ -15,11 +15,13 @@ const blogReducer = (state = initialBlogs, action) => {
     }
 }
 
-export const initializeBlogs = (blogs) => {
-    console.log(blogs)
-    return {
-        type: 'INIT_BLOGS',
-        data: blogs
+export const initializeBlogs = () => {
+    return async dispatch => {
+        const blogs = await blogService.getAll()
+        dispatch({
+          type: 'INIT_BLOGS',
+          data: blogs,
+        })
     }
 }
 
@@ -35,6 +37,5 @@ export const createBlog = (newBlog, token, setVisible, visible) => {
         })
     setVisible(!visible)
 }
-
 
 export { blogReducer }
