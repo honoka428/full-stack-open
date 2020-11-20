@@ -4,6 +4,7 @@ import blogService from '../services/blogs'
 import { toggleOnNotification, toggleOffNotification } from '../reducers/notificationReducer'
 import { useHistory } from 'react-router-dom'
 import { Comments } from './Comments'
+import { Button } from 'react-bootstrap'
 
 const BlogDetails = ({ match }) => {
   
@@ -70,17 +71,14 @@ const BlogDetails = ({ match }) => {
       }
     }
   
-    const deleteButton = () => 
-      <div>
-        <button onClick={handleDelete}> delete </button>
-      </div>
+    const deleteButton = () => <Button onClick={handleDelete}> delete </Button>
 
     return (
       <div>
         <h2>{blog.title}</h2>
         url: {blog.url} <br/>
         author: {blog.author} <br/>
-        likes: {blog.likes} <button onClick={handleLike}>like</button> <br/>
+        likes: {blog.likes} <Button onClick={handleLike}>like</Button> <br/>
         <p>added by {blog.user.name} </p>
 
         {

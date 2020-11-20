@@ -4,6 +4,7 @@ import { toggleOnNotification, toggleOffNotification } from '../reducers/notific
 import { useDispatch, useSelector } from 'react-redux'
 import { setUser, removeUser } from '../reducers/userReducer'
 import { updateUsername, updatePassword } from '../reducers/loginReducer'
+import { Form, Button } from 'react-bootstrap'
 
 const LoginForm = () => {
 
@@ -49,30 +50,30 @@ const LoginForm = () => {
   }
 
   return (
-    <form onSubmit={handleLogin}>
+    <Form onSubmit={handleLogin}>
       <h2> Login </h2>
-      <div>
+      <Form.Group>
         username
-        <input
+        <Form.Control
           id="username"
           type="text"
           value={username}
           name="Username"
           onChange={({ target }) => dispatch(updateUsername(target.value))}
         />
-      </div>
-      <div>
+      </Form.Group>
+      <Form.Group>
         password
-        <input
+        <Form.Control
           id="password"
           type="password"
           value={password}
           name="Password"
           onChange={({ target }) => dispatch(updatePassword(target.value))}
         />
-      </div>
-      <button type="submit">login</button>
-    </form>
+      </Form.Group>
+      <Button type="submit">login</Button>
+    </Form>
   )
 }
 

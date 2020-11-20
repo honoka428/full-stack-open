@@ -3,7 +3,9 @@ import { useSelector, useDispatch } from 'react-redux'
 import { removeUser } from '../reducers/userReducer'
 import { toggleOnNotification, toggleOffNotification } from '../reducers/notificationReducer'
 import { initializeLoginForm } from '../reducers/loginReducer'
-import {   useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
+import { Button } from 'react-bootstrap'
+import { Navigation } from  './Navigation'
 
 const LogoutForm = () => {
   const user = useSelector(state => state.user)
@@ -36,9 +38,15 @@ const LogoutForm = () => {
   }
 
   return(
-    <form onSubmit={handleLogout}>
-      <div> Hello, {user.name}! <button type="submit">logout</button> </div>
-    </form>
+    <div>
+      <form onSubmit={handleLogout}>
+        <div style={{display: 'flex', justifyContent: 'space-between'}}> 
+          <p style={{fontSize: 40, fontWeight: 'bold', color: 'palevioletred'}}>Hi, {user.name}!</p>
+          <Button style={{backgroundColor: 'palevioletred', border: 'none'}} type="submit">logout</Button> 
+        </div>
+      </form>
+      <Navigation />
+    </div>
  ) 
 }
 

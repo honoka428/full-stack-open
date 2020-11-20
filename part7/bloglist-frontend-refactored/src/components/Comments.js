@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { getCommentsForBlog } from '../reducers/commentReducer'
 import commentsService from '../services/comments'
 import { toggleOnNotification, toggleOffNotification } from '../reducers/notificationReducer'
+import { Button } from 'react-bootstrap'
 
 export const Comments = ({blogName}) => {
 
@@ -41,7 +42,7 @@ export const Comments = ({blogName}) => {
                 value={newComment}
                 type='text'
                 onChange={({target}) => setNewComment(target.value)}
-            /> <button onClick={handleCreateComment}>add comment</button>
+            /> <Button onClick={handleCreateComment}>add comment</Button>
             <ul>
                 { comments && comments.length > 0
                     ? comments.map(comment => <li key={comment.id}>{comment.content}</li>)

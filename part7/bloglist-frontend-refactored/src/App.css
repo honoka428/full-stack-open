@@ -49,17 +49,8 @@
   color: red;
 }
 
-.header {
-  display: flex;
-  padding: 10;
-  font-size: large;
-  font-weight: bold;
-  color: palevioletred;
-  background-color: rgb(255, 213, 213);
-}
-
 a, a:link, a:visited, a:focus, a:hover, a:active{
   color:rgba(0, 0, 0, 0.678);
   cursor: pointer;
-  font-weight: bold;
+  font-weight: bolder;
 }

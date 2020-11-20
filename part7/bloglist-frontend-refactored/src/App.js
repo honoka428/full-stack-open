@@ -7,7 +7,6 @@ import { LoginForm } from './components/Login'
 import { LogoutForm } from './components/Logout'
 import { Toggleable } from './components/Toggleable'
 import { Notification } from './components/Notification'
-import { Navigation } from './components/Navigation'
 import './App.css'
 import { initializeBlogs } from './reducers/blogReducer'
 import { useDispatch, useSelector } from 'react-redux'
@@ -40,52 +39,57 @@ const App = () => {
     <BlogList/>
 
   const blogForm = () =>
-    <Toggleable
-      buttonLabel='new blog'
-      setVisible={setVisible}
-      visible={visible}
-    >
-      <BlogForm 
+    <div>
+      <h2> Blogs </h2>
+      <Toggleable
+        buttonLabel='new blog'
         setVisible={setVisible}
         visible={visible}
-      />
-    </Toggleable>
+      >
+        <BlogForm 
+          setVisible={setVisible}
+          visible={visible}
+        />
+      </Toggleable>
+    </div>
+
   console.log(user)
 
   const userList = () =>
     <UserList />
 
   return (
-    <Router>
-      <header class='header'>
-        {user === null ? loginForm() : logoutForm(user)}
-        <Navigation />
-      </header>
-      
-      <body>
-        <h1>Blog List</h1>
-        <Notification />
-        <Switch>
-          <Route exact path='/'>
-            {user !== null && blogForm()}
-            {user !== null && blogList()}
-          </Route>
-          <Route exact path='/users'>
-            {user !== null && userList()}
-          </Route>
-          <Route 
-            exact path='/users/:id'
-            render={({ match }) => 
-              user !== null && <UserBlogs match={match}/>
-          }/>
-          <Route 
-            exact path='/blogs/:id'
-            render={({ match }) => 
-              user !== null && <BlogDetails match={match}/>
-          }/>
-        </Switch>
-      </body>
-    </Router>
+    <div  className="container">
+      <Router>
+          <header>
+            <h1 style={{marginTop: 30, marginBottom: 30, fontWeight: 'bold', color: 'papayawhip', fontSize: 80}}>Blog App</h1>
+            <Notification />
+            {user === null ? loginForm() : logoutForm(user)}
+          </header>
+          
+          <div>
+            <Switch>
+              <Route exact path='/'>
+                {user !== null && blogForm()}
+                {user !== null && blogList()}
+              </Route>
+              <Route exact path='/users'>
+                {user !== null && userList()}
+              </Route>
+              <Route 
+                exact path='/users/:id'
+                render={({ match }) => 
+                  user !== null && <UserBlogs match={match}/>
+              }/>
+              <Route 
+                exact path='/blogs/:id'
+                render={({ match }) => 
+                  user !== null && <BlogDetails match={match}/>
+              }/>
+            </Switch>
+          </div>
+        </Router>
+    </div>
   )
 }
 
