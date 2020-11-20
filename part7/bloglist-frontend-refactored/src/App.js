@@ -7,11 +7,12 @@ import { LoginForm } from './components/Login'
 import { LogoutForm } from './components/Logout'
 import { Toggleable } from './components/Toggleable'
 import { Notification } from './components/Notification'
+import { Navigation } from './components/Navigation'
 import './App.css'
 import { initializeBlogs } from './reducers/blogReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUser } from './reducers/userReducer'
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import { UserBlogs } from './components/UserBlogs'
 import { getAllUsers } from './reducers/allUsersReducer'
 
@@ -56,36 +57,34 @@ const App = () => {
 
   return (
     <Router>
-      <div>
+      <header class='header'>
+        {user === null ? loginForm() : logoutForm(user)}
+        <Navigation />
+      </header>
+      
+      <body>
         <h1>Blog List</h1>
         <Notification />
-        {user === null ? loginForm() : logoutForm(user)}
-        {/* <Navigation /> */}
-      </div>
-      <div>
-        <Link to='/'/>
-        <Link to='/users'/>
-        <Link to='/users/:id'/>
-      </div>
-      <Switch>
-        <Route exact path='/'>
-          {user !== null && blogForm()}
-          {user !== null && blogList()}
-        </Route>
-        <Route exact path='/users'>
-          {user !== null && userList()}
-        </Route>
-        <Route 
-          exact path='/users/:id'
-          render={({ match }) => 
-            user !== null && <UserBlogs match={match}/>
-        }/>
-        <Route 
-          exact path='/blogs/:id'
-          render={({ match }) => 
-            user !== null && <BlogDetails match={match}/>
-        }/>
-      </Switch>
+        <Switch>
+          <Route exact path='/'>
+            {user !== null && blogForm()}
+            {user !== null && blogList()}
+          </Route>
+          <Route exact path='/users'>
+            {user !== null && userList()}
+          </Route>
+          <Route 
+            exact path='/users/:id'
+            render={({ match }) => 
+              user !== null && <UserBlogs match={match}/>
+          }/>
+          <Route 
+            exact path='/blogs/:id'
+            render={({ match }) => 
+              user !== null && <BlogDetails match={match}/>
+          }/>
+        </Switch>
+      </body>
     </Router>
   )
 }

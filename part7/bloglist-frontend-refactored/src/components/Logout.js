@@ -37,8 +37,7 @@ const LogoutForm = () => {
 
   return(
     <form onSubmit={handleLogout}>
-      <div> Hello, {user.name}! </div>
-      <button type="submit">logout</button>
+      <div> Hello, {user.name}! <button type="submit">logout</button> </div>
     </form>
  ) 
 }
