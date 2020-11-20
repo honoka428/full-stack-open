@@ -10,13 +10,8 @@ const UserBlogs = ({match}) => {
 
     const matchedBlogs = match ? blogs.filter(blog => blog.user.id === match.params.id): null
 
-    // const selectedUser = match ? allUsers.filter(user => user.id = match.params.id) : null
-        // CALLING THIS SETS ALL ALLUSER ID'S TO BE THE SAME
-
     console.log('match:', match)
     console.log('matched blogs:', matchedBlogs)
-
-    // console.log(selectedUser)
 
     return (
         <div>

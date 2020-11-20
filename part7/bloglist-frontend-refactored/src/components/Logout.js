@@ -15,7 +15,7 @@ const LogoutForm = () => {
     
     try {
       dispatch(removeUser())
-      dispatch(initializeLoginForm())  // FIX HERE - logout doenst claer form
+      dispatch(initializeLoginForm())
       window.localStorage.clear()
       dispatch(toggleOnNotification({
         type: 'greenError',

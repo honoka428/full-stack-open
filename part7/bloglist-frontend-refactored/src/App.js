@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { BlogForm } from './components/BlogForm'
 import { BlogList } from './components/BlogList'
+import { BlogDetails } from './components/BlogDetails'
 import { UserList } from './components/UserList'
 import { LoginForm } from './components/Login'
 import { LogoutForm } from './components/Logout'
@@ -78,7 +79,12 @@ const App = () => {
           exact path='/users/:id'
           render={({ match }) => 
             user !== null && <UserBlogs match={match}/>
-          }/>
+        }/>
+        <Route 
+          exact path='/blogs/:id'
+          render={({ match }) => 
+            user !== null && <BlogDetails match={match}/>
+        }/>
       </Switch>
     </Router>
   )
