@@ -8,6 +8,7 @@ const blogsRouter = require('./controllers/blogs')
 const usersRouter = require('./controllers/users')
 const middleware = require('./utils/middleware')
 const loginRouter = require('./controllers/login')
+const commentsRouter = require('./controllers/comments')
 require('express-async-errors')
 
 
@@ -28,8 +29,9 @@ app.use(cors()) // allow api connections from multiple endpoints
 app.use(express.json()) // parse all json 
 app.use(middleware.tokenExtractor) // make token field accessible from request.token from all routes
 app.use('/api/blogs', blogsRouter) // use /api/blogs are root route for all requests in blogsRouter
-app.use('/api/users', usersRouter) // use /api/users are root route for all requests in blogsRouter
-app.use('/api/login', loginRouter) // use /api/login are root route for all requests in blogsRouter
+app.use('/api/users', usersRouter) // use /api/users are root route for all requests in usersRouter
+app.use('/api/login', loginRouter) // use /api/login are root route for all requests in loginRouter
+app.use('/api/comments', commentsRouter) // use /api/comments are root route for all requests in commentRouter
 
 if (process.env.NODE_ENV === 'test') {
     const testingRouter = require('./controllers/testing')

@@ -2,7 +2,8 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import blogService from '../services/blogs'
 import { toggleOnNotification, toggleOffNotification } from '../reducers/notificationReducer'
-import {   useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
+import { Comments } from './Comments'
 
 const BlogDetails = ({ match }) => {
   
@@ -73,20 +74,21 @@ const BlogDetails = ({ match }) => {
       <div>
         <button onClick={handleDelete}> delete </button>
       </div>
-  
-    return (
-        <div>
-            <h2>{blog.title}</h2>
-            url: {blog.url} <br/>
-            author: {blog.author} <br/>
-            likes: {blog.likes} <button onClick={handleLike}>like</button> <br/>
-            <p>added by {blog.user.name} </p>
 
-            {
-            blog.user.id === user.id  // Show delete button only when user is creator of blog
-                ? deleteButton()
-                : <div></div>
-            }
+    return (
+      <div>
+        <h2>{blog.title}</h2>
+        url: {blog.url} <br/>
+        author: {blog.author} <br/>
+        likes: {blog.likes} <button onClick={handleLike}>like</button> <br/>
+        <p>added by {blog.user.name} </p>
+
+        {
+        blog.user.id === user.id  // Show delete button only when user is creator of blog
+            ? deleteButton()
+            : <div></div>
+        }
+        <Comments blogName={blog.title}/>
       </div>
     )
   }
