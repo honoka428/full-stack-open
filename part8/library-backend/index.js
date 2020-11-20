@@ -78,6 +78,13 @@ let books = [
   },
 ]
 
+const bookCountByAuthor = []
+
+authors.forEach(author => {
+  let bookList = books.filter(book => author.name === book.author)
+  bookCountByAuthor.push({ name: author.name, bookCount: bookList.length })
+})
+
 const typeDefs = gql`
   enum Genre {
     classic
@@ -97,10 +104,16 @@ const typeDefs = gql`
       genres: [Genre!]!
   }
 
+  type Author {
+    name: String!,
+    bookCount: Int!
+  }
+
   type Query {
     bookCount: Int!
     authorCount: Int!
     allBooks: [Book!]!
+    allAuthors: [Author!]!
   }
 `
 
@@ -108,7 +121,8 @@ const resolvers = {
   Query: {
     bookCount: () => books.length,
     authorCount: () => authors.length,
-    allBooks: () => books
+    allBooks: () => books,
+    allAuthors: () => bookCountByAuthor
   }
 }
 
