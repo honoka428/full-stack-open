@@ -7,4 +7,9 @@ const getAll = async() => {
     return response.data
 }
 
-export default { getAll }
+const addOne = async(comment) => {
+    const response = await axios.post(baseUrl, comment)
+    return response.data
+}
+
+export default { getAll, addOne }
