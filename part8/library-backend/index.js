@@ -101,8 +101,8 @@ const typeDefs = gql`
   }
 
   type Author {
-    name: String!,
-    bookCount: Int!
+    name: String!
+    bookCount: Int
     born: Int
   }
 
@@ -114,12 +114,17 @@ const typeDefs = gql`
   }
 
   type Mutation {
+    editAuthor(
+      name: String!
+      setBornTo: Int!
+    ): Author
+
     addBook(
       title: String!
       author: String
       published: Int!
       genres: [String]!
-    ): Book
+    ): Book 
   }
 `
 
@@ -187,7 +192,21 @@ const resolvers = {
         authors = authors.concat({name: args.author, id: uuid()})
       }
       return book
-    }}
+    },
+    editAuthor: (root, args) => {
+      authors.forEach(a => {
+        a.name === args.name
+          ? a.born = args.setBornTo
+          : a
+      })
+
+      const response = authors.find(a => a.name === args.name)
+        ? {name: args.name, born: args.setBornTo}
+        : null
+
+      return response
+    }
+  }
 }
 
 const server = new ApolloServer({
