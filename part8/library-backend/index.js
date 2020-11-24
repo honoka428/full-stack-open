@@ -1,4 +1,5 @@
 const { ApolloServer, gql } = require('apollo-server')
+const { v1: uuid } = require('uuid')
 
 let authors = [
   {
@@ -78,13 +79,6 @@ let books = [
   },
 ]
 
-const bookCountByAuthor = []
-
-authors.forEach(author => {
-  let bookList = books.filter(book => author.name === book.author)
-  bookCountByAuthor.push({ name: author.name, bookCount: bookList.length })
-})
-
 const typeDefs = gql`
   enum Genre {
     classic
@@ -94,22 +88,38 @@ const typeDefs = gql`
     refactoring
     design
     agile
+    nosql
+    database
   }
 
   type Book {
-      title: String!
+      title: String
+      published: Int
+      author: String
+      id: String
+      genres: [Genre]
   }
 
   type Author {
     name: String!,
     bookCount: Int!
+    born: Int
   }
 
   type Query {
     bookCount: Int!
     authorCount: Int!
-    allBooks(author: String!): [Book!]!
+    allBooks(author: String, genre: String): [Book!]!
     allAuthors: [Author!]!
+  }
+
+  type Mutation {
+    addBook(
+      title: String!
+      author: String
+      published: Int!
+      genres: [String]!
+    ): Book
   }
 `
 
@@ -118,18 +128,66 @@ const resolvers = {
     bookCount: () => books.length,
     authorCount: () => authors.length,
     allBooks: (root, args) => {
-      const allBooks = []
+      if (args.genre && args.author) {
+        let allBooks = []
 
-      books.forEach(book => {
-        args.author === book.author
-        ? allBooks.push({ title: book.title })
-        : allBooks
-      })
-      
-      return allBooks
+        books.forEach(book => {
+          ( book.genres.includes(args.genre) && args.author === book.author )
+          ? allBooks.push({ title: book.title, author: book.author })
+          : allBooks
+        })
+        
+        return allBooks
+      }    
+
+      else if (args.author) {
+        let allBooks = []
+
+        books.forEach(book => {
+          args.author === book.author
+          ? allBooks.push({ title: book.title })
+          : allBooks
+        })
+        
+        return allBooks
+      }
+      else if (args.genre) {
+        let allBooks = []
+
+        books.forEach(book => {
+          book.genres.includes(args.genre)
+          ? allBooks.push({ title: book.title, author: book.author })
+          : allBooks
+        })
+        
+        return allBooks
+      }
+      else {
+        return books
+      }
     },
-    allAuthors: () => bookCountByAuthor
-  }
+    allAuthors: () => {
+      const bookCountByAuthor = []
+
+      authors.forEach(author => {
+        let bookList = books.filter(book => author.name === book.author)
+        bookCountByAuthor.push({ name: author.name, bookCount: bookList.length, born: author.born })
+      })
+
+      return bookCountByAuthor
+    }
+  },
+
+  Mutation: {
+    addBook: (root, args) => {
+      const book = { ...args, id: uuid() }
+      books = books.concat(book)
+
+      if (!authors.find(a => a.name === args.author)) {
+        authors = authors.concat({name: args.author, id: uuid()})
+      }
+      return book
+    }}
 }
 
 const server = new ApolloServer({
