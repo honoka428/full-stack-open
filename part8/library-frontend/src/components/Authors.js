@@ -1,4 +1,3 @@
-  
 import React, { useState } from 'react'
 import { gql, useQuery, useMutation } from '@apollo/client';
 
@@ -25,7 +24,7 @@ const EDIT_AUTHOR = gql`
 `
 
 const Authors = (props) => {
-  const [ authorName, setAuthorName ] = useState('')
+  const [ authorName, setAuthorName ] = useState('Robert Martin')
   const [ birthyear, setBirthyear ] = useState()
 
   const result = useQuery(ALL_AUTHORS)
@@ -49,7 +48,8 @@ const Authors = (props) => {
 
   const submit = async (event) => {
     event.preventDefault()
-
+    console.log(authorName)
+    console.log(birthyear)
     updateAuthor({  variables: { authorName, birthyear} })
 
     console.log('update author...')
@@ -73,7 +73,7 @@ const Authors = (props) => {
             </th>
           </tr>
           {authors.map(a =>
-            <tr key={a.name}>
+            <tr key={a.born}>
               <td>{a.name}</td>
               <td>{a.born}</td>
               <td>{a.bookCount}</td>

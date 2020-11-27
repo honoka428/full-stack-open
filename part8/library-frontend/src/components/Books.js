@@ -15,7 +15,9 @@ query {
 
 const Books = (props) => {
 
-  const result = useQuery(ALL_BOOKS)
+  const result = useQuery(ALL_BOOKS,  {
+    pollInterval: 2000
+  })
 
   if (result.loading){
     return <div> Loading... </div>
@@ -25,6 +27,8 @@ const Books = (props) => {
     return null
   }
 
+  console.log('result data', result.data.allBooks)
+  
   const books = result.data.allBooks
 
   return (
